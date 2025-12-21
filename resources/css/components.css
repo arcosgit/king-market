@@ -1,0 +1,36 @@
+.bg-dark {
+    background-color: #292929;
+}
+
+.btn-dark-gray {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #263646;
+    padding: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 14px;
+}
+.btn-dark-gray:hover{
+    background-color: #395169;
+}
+
+.btn-green {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: oklch(76.8% 0.233 130.85);
+    padding: 10px;
+    border: 1px solid oklch(76.8% 0.233 130.85);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: black;
+    font-size: 14px;
+}
+.btn-green:hover{
+    background-color: inherit;
+    color: oklch(76.8% 0.233 130.85);
+}
