@@ -6,4 +6,14 @@ export default {
     'orders': 'Заказы',
     'profile': 'Профиль',
     'enterNameProductOrArticle': 'Впишите название продукта или его артикул',
-};
+    'descriptionHome': 'king-market, это не обыкновенный маркет, здесь вы сможете найти любой товар, который вы только захотите',
+    'titleHome': 'Главная',
+    'login': 'Войти',
+    'loginModal': 'ВХОД',
+    'signup': 'Зарегистрироваться',
+    'enterEmail': 'Впишите почту',
+    'enterPassword': 'Впишите пароль',
+    'enterLogin': 'Впишите логин',
+    'repeatPassword': 'Повторите пароль',
+    'haveAcc': 'Уже есть аккаунт',
+}

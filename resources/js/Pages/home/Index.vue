@@ -1,10 +1,21 @@
 <script setup>
-import Header from '@/Layout/Header.vue'
-
+import MainLayout from '@/Layout/MainLayout.vue';
+import Card from '@/Components/product/Card.vue';
+import {useTranslateStore} from "@/storage/lang/translate.js";
+import { Head } from '@inertiajs/vue3';
 
 </script>
 <template>
-    <div class="container mx-auto">
-        <Header></Header>
-    </div>
+    <Head>
+        <title>{{ useTranslateStore().t('titleHome') }}</title>
+        <meta name="description" :content="useTranslateStore().t('descriptionHome')">
+    </Head>
+    <MainLayout>
+        <div class="flex justify-between flex-wrap overflow-auto">
+            <Card />
+            <Card />
+            <Card />
+            <Card />
+        </div>
+    </MainLayout>
 </template>
