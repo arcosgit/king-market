@@ -16,4 +16,5 @@ export default {
     'enterLogin': 'Enter your name',
     'repeatPassword': 'Repeat password',
     'haveAcc': 'Already have an account',
+    'notSamePass': 'The passwords did not match',
 };

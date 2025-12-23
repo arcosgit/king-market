@@ -13,6 +13,10 @@ class StoreUserRequest extends FormRequest
     {
         return true;
     }
+    public function prepareForValidation()
+    {
+        app()->setLocale($this->lang);
+    }
 
     /**
      * Get the validation rules that apply to the request.

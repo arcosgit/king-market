@@ -16,4 +16,5 @@ export default {
     'enterLogin': 'Впишите логин',
     'repeatPassword': 'Повторите пароль',
     'haveAcc': 'Уже есть аккаунт',
+    'notSamePass': 'Пароли не совпали',
 }

@@ -1,21 +1,21 @@
 <?php
 
 return [
-    'required' => 'Поле :attribute необходимо заполнить',
-    'string' => 'Поле :attribute должно быть строкой',
+    'required' => 'Поле :attribute обязательно для заполнения.',
+    'string' => 'Поле :attribute должно быть строкой.',
     'max' => [
-        'array' => 'The :attribute field must not have more than :max items.',
-        'file' => 'The :attribute field must not be greater than :max kilobytes.',
-        'numeric' => 'The :attribute field must not be greater than :max.',
-        'string' => 'The :attribute Максимальная длинна :max символов',
+        'array' => 'Количество элементов в поле :attribute не может превышать :max.',
+        'file' => 'Размер файла в поле :attribute не должен превышать :max килобайт.',
+        'numeric' => 'Значение поля :attribute не может быть больше :max.',
+        'string' => 'Количество символов в поле :attribute не может превышать :max.',
     ],
-    'unique' => 'The :attribute has already been taken.',
+    'unique' => 'Такое значение поля :attribute уже существует.',
     'min' => [
-        'array' => 'The :attribute field must have at least :min items.',
-        'file' => 'The :attribute field must be at least :min kilobytes.',
-        'numeric' => 'The :attribute field must be at least :min.',
-        'string' => ':attribute минимальная длина :min символов',
+        'array' => 'Количество элементов в поле :attribute должно быть не менее :min.',
+        'file' => 'Размер файла в поле :attribute должен быть не менее :min килобайт.',
+        'numeric' => 'Значение поля :attribute должно быть не менее :min.',
+        'string' => 'Количество символов в поле :attribute должно быть не менее :min.',
     ],
-    'same' => 'The :attribute field must match :other.',
-    'in' => 'The selected :attribute is invalid.',
+    'same' => 'Значение поля :attribute должно совпадать со значением поля :other.',
+    'in' => 'Выбранное значение поля :attribute некорректно.',
 ];
