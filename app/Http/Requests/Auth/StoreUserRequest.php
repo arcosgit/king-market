@@ -30,7 +30,7 @@ class StoreUserRequest extends FormRequest
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
             'password' => ['required', 'string', 'min:8', 'max:255'],
             'repeatPassword' => ['required', 'string', 'min:8', 'max:255', 'same:password'],
-            'lang' => ['nullable', 'in:ru,en'],
+            'lang' => ['required', 'in:ru,en'],
         ];
     }
 }
