@@ -14,7 +14,7 @@ final class Lang
         }
     }
 
-    public function lang()
+    public function getLang()
     {
         return $this->lang;
     }

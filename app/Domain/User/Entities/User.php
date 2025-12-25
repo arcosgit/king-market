@@ -20,10 +20,10 @@ final class User
     ){}
     public function id(){ return $this->id; }
     public function name(){ return $this->name; }
-    public function email(){ return $this->email->email(); }
-    public function lang(){ return $this->lang->lang(); }
-    public function roleId(){ return $this->role_id->role(); }
-    public function password(){ return $this->password->password(); }
+    public function email(){ return $this->email; }
+    public function lang(){ return $this->lang; }
+    public function roleId(){ return $this->role_id; }
+    public function password(){ return $this->password; }
 
     public function changeId(int $id)
     {

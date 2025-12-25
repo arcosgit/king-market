@@ -15,7 +15,7 @@ final class Role
         }
     }
 
-    public function role()
+    public function getRoleId()
     {
         return $this->role;
     }

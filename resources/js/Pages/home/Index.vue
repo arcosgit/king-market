@@ -11,7 +11,7 @@ import { Head } from '@inertiajs/vue3';
         <meta name="description" :content="useTranslateStore().t('descriptionHome')">
     </Head>
     <MainLayout>
-        <div class="flex justify-between flex-wrap overflow-auto">
+        <div class="flex justify-between flex-wrap">
             <Card />
             <Card />
             <Card />

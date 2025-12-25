@@ -4,7 +4,7 @@ import wordsEn from "@/lang/en/en.js";
 const availableLang = ["en", "ru"];
 export const useTranslateStore = defineStore ('translate', {
     state: () => ({
-        currentLang: "ru"
+        currentLang: "en"
     }),
     actions: {
         t(word) {

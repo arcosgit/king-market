@@ -1,0 +1,76 @@
+@layer utilities {
+  @keyframes dot-flashing {
+    0%, 100% {
+      opacity: 0;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+
+  .animate-dot-flashing-1 {
+    animation: dot-flashing 1.5s infinite;
+  }
+
+  .animate-dot-flashing-2 {
+    animation: dot-flashing 1.5s infinite;
+    animation-delay: 0.2s;
+  }
+
+  .animate-dot-flashing-3 {
+    animation: dot-flashing 1.5s infinite;
+    animation-delay: 0.4s;
+  }
+}
+
+@layer utilities {
+  @keyframes scale-in {
+    from {
+      transform: scale(0.1);
+      opacity: 0;
+    }
+    to {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  .animate-scale-in {
+    animation: scale-in 0.5s ease-out forwards;
+  }
+}
+
+@layer utilities {
+  @keyframes opacity-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+  }
+
+  .animate-opacity-in {
+    animation: opacity-in 0.5s ease-out forwards;
+  }
+}
+
+.underline-text{
+    position: relative;
+    cursor: pointer;
+}
+.underline-text::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  height: 1px;
+  background-color: white;
+  width: 0;
+  transform: translateX(-50%);
+  transition: all 0.3s ease;
+}
+
+.underline-text:hover::after {
+  width: 100%;
+}

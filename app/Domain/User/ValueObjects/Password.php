@@ -12,7 +12,7 @@ final class Password
             throw InvalidPasswordException::notEnoughSymbols();
         }
     }
-    public function password()
+    public function getPassword()
     {
         return $this->password;
     }

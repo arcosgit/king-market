@@ -12,7 +12,7 @@ final class Email
         }
     }
 
-    public function email()
+    public function getEmail()
     {
         return $this->email;
     }
