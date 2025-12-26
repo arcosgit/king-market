@@ -30,4 +30,10 @@ export default {
     'logout': 'Log out',
     'balance': 'Balance',
     'youLooked': 'You looked',
+    'enterOldPassword': 'Enter your old password',
+    'enterNewPassword': 'Enter a new password',
+    'change': 'Change',
+    'topUpBalance': 'Top up your balance',
+    'replenish': 'Replenish',
+    'enterAmount': 'Enter the amount',
 };

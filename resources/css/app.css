@@ -16,7 +16,7 @@
 }
 .custom-scrollbar::-webkit-scrollbar {
     display: none;
-  }
+}
 .custom-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
@@ -24,10 +24,21 @@
 .modal-enter-from .modal-window {
     opacity: 0;
     transform: scale(0.5);
-  }
+}
 .modal-leave-to .modal-window {
     opacity: 0;
     transform: scale(1.5);
+}
+.slide-down-enter-active {
+  transition: opacity 0.3s ease, transform 0.4s ease;
+}
+.slide-down-enter-from {
+  opacity: 0;
+  transform: translateY(-100%);
+}
+.slide-down-enter-to {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 

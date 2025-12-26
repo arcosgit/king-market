@@ -31,4 +31,10 @@ export default {
     'logout': 'Выйти из аккаунта',
     'balance': 'Баланс',
     'youLooked': 'Вы смотрели',
+    'enterOldPassword': 'Впишите старый пароль',
+    'enterNewPassword': 'Впишите новый пароль',
+    'change': 'Сменить',
+    'topUpBalance': 'Пополнить баланс',
+    'replenish': 'Пополнить',
+    'enterAmount': 'Впишите нужную сумму',
 }

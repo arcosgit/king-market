@@ -1,5 +1,5 @@
 <script setup>
-import Auth from "@/Components/user/auth/Auth.vue";
+import Auth from "@/Components/user/modals/Auth.vue";
 import {useTranslateStore} from "@/storage/lang/translate.js";
 import {useUserStore} from "@/storage/user/user.js";
 import axios from "axios";
