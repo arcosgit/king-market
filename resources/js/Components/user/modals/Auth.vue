@@ -20,8 +20,8 @@ const success = ref(false);
 const setUser = (user) => {
     load.value = false;
     success.value = true;
-    useUserStore().setUser(user);
     setTimeout(() => {
+        useUserStore().setUser(user);
         success.value = false;
         emit('close', true);
     }, 2000);

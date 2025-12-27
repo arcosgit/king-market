@@ -37,4 +37,5 @@ export default {
     'topUpBalance': 'Пополнить баланс',
     'replenish': 'Пополнить',
     'enterAmount': 'Впишите нужную сумму',
+    'noAuth': 'Вы не авторизованы',
 }

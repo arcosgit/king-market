@@ -10,13 +10,14 @@ const language = ref(useTranslateStore().currentLang);
 const showAuthModalFlag = ref(false);
 watch(language, async (newLang, OldLang) =>{
     useTranslateStore().currentLang = newLang;
+    window.axios.defaults.headers.common['X-Lang'] = newLang;
     // const res = await axios.post(route('user.change.lang'), {lang: newLang});
     // console.log(res);
 });
 </script>
 <template>
     <Auth :show="showAuthModalFlag" @close="showAuthModalFlag = false"></Auth>
-    <header class="px-2.5 min-h-20 max-h-20 shadow-[0_4px_24px_0_rgba(255,255,255,0.4)] rounded-b-[20px] flex items-center">
+    <header class="px-2.5 min-h-20 max-h-20 shadow-[0_0px_15px_0_rgba(255,255,255,0.4)] rounded-b-[20px] flex items-center">
         <div class="flex w-full gap-x-5">
             <Link :href="route('index')">
                 <img class="block h-10" src="/public/img/logo.svg" alt="logo">

@@ -4,7 +4,7 @@ namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ChangeUserNameRequest extends FormRequest
+class ChangeUserPasswordRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,7 +22,9 @@ class ChangeUserNameRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:100'],
+            'oldPassword' => ['required', 'string', 'max:255'],
+            'newPassword' => ['required', 'string', 'min:8', 'max:255'],
+            'repeatPassword' => ['required', 'string', 'min:8', 'max:255', 'same:newPassword'],
         ];
     }
 }

@@ -6,6 +6,7 @@ import { Link } from '@inertiajs/vue3';
 import { createPinia } from 'pinia';
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
 import {useTranslateStore} from "@/storage/lang/translate.js";
+
 createInertiaApp({
   resolve: name => {
     const pages = import.meta.glob('./Pages/**/*.vue', { eager: true })
@@ -21,6 +22,9 @@ createInertiaApp({
       .use(ZiggyVue)
       .use(pinia)
       .mount(el);
+    window.axios.defaults.headers.common['X-Lang'] = useTranslateStore().currentLang;
   },
-})
+
+});
+
 

@@ -37,7 +37,7 @@ onBeforeMount(async () => {
         <div class="sticky top-0 z-10 bg-dark">
             <Header></Header>
         </div>
-        <main class="grow shadow-[0_4px_24px_0_rgba(255,255,255,0.4)] rounded-t-[20px] px-2.5 py-5">
+        <main class="grow shadow-[0_0px_15px_0_rgba(255,255,255,0.4)] rounded-t-[20px] px-2.5 py-5">
             <slot></slot>
         </main>
     </div>

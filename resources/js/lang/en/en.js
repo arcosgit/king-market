@@ -36,4 +36,5 @@ export default {
     'topUpBalance': 'Top up your balance',
     'replenish': 'Replenish',
     'enterAmount': 'Enter the amount',
+    'noAuth': 'You are not logged in.',
 };
