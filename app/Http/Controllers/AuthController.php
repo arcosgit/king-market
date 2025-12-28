@@ -30,6 +30,9 @@ class AuthController extends Controller
         if(!$user){
             return response()->json(['error_password' => __('auth.password')]);
         }
-        return UserResource::make($user)->resolve();
+        return response()->json([
+            'user' => UserResource::make($user['user'])->resolve(),
+            'balance' => $user['balance'],
+        ]);
     }
 }

@@ -9,6 +9,7 @@ use App\Domain\User\ValueObjects\Email;
 use App\Domain\User\ValueObjects\Lang;
 use App\Domain\User\ValueObjects\Password;
 use App\Domain\User\ValueObjects\Role;
+use App\Models\BalanceModel;
 use App\Models\UserModel;
 
 final class StoreUserUseCase
@@ -23,6 +24,7 @@ final class StoreUserUseCase
         $user_model = UserModel::find($user_id);
         \Auth::login($user_model, true);
         $user->changeId($user_id);
+        BalanceModel::create(['user_id' => $user->id(), 'amount' => 0]);
         return $user;
     }
 }

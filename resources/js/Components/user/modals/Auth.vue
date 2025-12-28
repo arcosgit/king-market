@@ -4,6 +4,7 @@ import Load from '@/Widgets/icons/Load.vue';
 import Success from '@/Widgets/icons/Success.vue';
 import {useTranslateStore} from "@/storage/lang/translate.js";
 import {useUserStore} from "@/storage/user/user.js";
+import {useUserBalanceStore} from "@/storage/balance/userBalance.js";
 import axios from "axios";
 import { reactive, ref } from "vue";
 import { route } from "ziggy-js";
@@ -17,11 +18,12 @@ const load = ref(false);
 const success = ref(false);
 
 
-const setUser = (user) => {
+const setUser = (user, balance = 0) => {
     load.value = false;
     success.value = true;
     setTimeout(() => {
         useUserStore().setUser(user);
+        useUserBalanceStore().balance = balance;
         success.value = false;
         emit('close', true);
     }, 2000);
@@ -56,7 +58,7 @@ const login = async () => {
             errors.login.password = user.data.error_password;
         } else {
             setTimeout(() => {
-                setUser(user.data);
+                setUser(user.data.user, user.data.balance);
             }, 1000);
         }
     } catch (error) {

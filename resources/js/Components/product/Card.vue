@@ -12,5 +12,6 @@
             <img src="/public/img/comment.svg" alt="reviews">
             <div class="text-gray">2 отзыва</div>
         </div>
+        <slot></slot>
     </div>
 </template>

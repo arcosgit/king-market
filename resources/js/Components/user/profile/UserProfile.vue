@@ -3,6 +3,7 @@ import Card from '@/Components/product/Card.vue';
 import ResetPassword from '@/Components/user/modals/ResetPassword.vue';
 import {useTranslateStore} from "@/storage/lang/translate.js";
 import {useUserStore} from "@/storage/user/user.js";
+import {useUserBalanceStore} from "@/storage/balance/userBalance.js";
 import { reactive, ref } from 'vue';
 import TopUpBalance from '@/Components/user/modals/TopUpBalance.vue'
 import axios from 'axios';
@@ -110,7 +111,7 @@ const logout = async () => {
         <button @click.prevent="logout" class="border text-[14px] h-10 p-2.5 flex justify-center items-center border-red-500 bg-red-500 rounded-[10px] hover:bg-inherit hover:text-red-500 transition duration-300 cursor-pointer">{{ useTranslateStore().t('logout') }}</button>
     </div>
     <div class="flex items-center gap-x-2.5 mt-2.5">
-        <div class="font-bold text-[20px]">{{ useTranslateStore().t('balance') }}: <span class="text-violet-800">2000</span></div>
+        <div class="font-bold text-[20px]">{{ useTranslateStore().t('balance') }}: <span class="text-violet-800">{{ useUserBalanceStore().balance }}</span></div>
         <img @click.prevent="btnsChange.balance = !btnsChange.balance" class="cursor-pointer rounded-[5px] hover:shadow-[0_0px_15px_0_rgba(138,201,121,1)] transition duration-150" src="/public/img/add.svg" alt="add">
     </div>
     <div class="font-bold text-[20px] mt-2.5">{{ useTranslateStore().t('youLooked') }}</div>

@@ -16,13 +16,13 @@ final class AuthUserUseCase
     public function __construct(
         private UserRepositoryInterface $users
     ){}
-    public function execute(LoginUserData $user_data): User|bool
+    public function execute(LoginUserData $user_data): array|bool
     {
-        $user_model = UserModel::where('email', $user_data->email)->first();
+        $user_model = UserModel::where('email', $user_data->email)->with('balance')->first();
         $user = new User($user_model->id, $user_model->name, new Email($user_data->email), new Lang($user_data->lang), new Role($user_model->role_id), new Password($user_data->password));
         $result = $this->users->auth($user);
         if($result){
-            return $user;
+            return ['user' => $user, 'balance' => $user_model->balance->amount];
         } else {
             return false;
         }

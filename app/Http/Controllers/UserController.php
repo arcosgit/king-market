@@ -6,11 +6,13 @@ use App\Domain\User\Entities\User;
 use App\Domain\User\ValueObjects\Email;
 use App\Domain\User\ValueObjects\Lang;
 use App\Domain\User\ValueObjects\Role;
+use App\Http\Requests\Balance\TopUpBalanceRequest;
 use App\Http\Requests\User\ChangeLangRequest;
 use App\Http\Requests\User\ChangeUserEmailRequest;
 use App\Http\Requests\User\ChangeUserNameRequest;
 use App\Http\Requests\User\ChangeUserPasswordRequest;
 use App\Http\Resources\User\UserResource;
+use App\Models\BalanceModel;
 use App\Models\UserModel;
 use Auth;
 use Hash;
@@ -35,9 +37,12 @@ class UserController extends Controller
 
     public function getUser()
     {
-        $user = UserModel::where('id', auth()->id())->first();
-        $user = new User($user->id, $user->name, new Email($user->email), new Lang($user->lang), new Role($user->role_id), null);
-        return UserResource::make($user)->resolve();
+        $userModel = UserModel::where('id', auth()->id())->with('balance')->first();
+        $user = new User($userModel->id, $userModel->name, new Email($userModel->email), new Lang($userModel->lang), new Role($userModel->role_id), null);
+        return response()->json([
+            'user' => UserResource::make($user)->resolve(),
+            'balance' => $userModel->balance->amount
+        ]);
     }
 
     public function changeName(ChangeUserNameRequest $request)
@@ -66,6 +71,14 @@ class UserController extends Controller
         } else {
             return response()->json(['error' => __('auth.password')], 422);
         }
+    }
+
+    public function topUpBalance(TopUpBalanceRequest $request)
+    {
+        $amount = $request->validated()['amount'];
+        $balance = BalanceModel::where('user_id', auth()->id())->first();
+        $balance->update(['amount' => $balance->amount + $amount]);
+        return response()->json(['success' => true, 'balance' => $balance->amount]);
     }
 
     public function logout(Request $request)

@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import {useUserBalanceStore} from "@/storage/balance/userBalance.js";
 export const useUserStore = defineStore('user', {
     state: () => ({
         id: null,
@@ -19,6 +20,7 @@ export const useUserStore = defineStore('user', {
             this.name = null;
             this.email = null;
             this.roleId = null;
+            useUserBalanceStore().balance = 0;
         }
     }
 });

@@ -4,6 +4,7 @@ import Header from './Header.vue';
 import axios from 'axios';
 import { route } from 'ziggy-js';
 import {useUserStore} from "@/storage/user/user.js";
+import {useUserBalanceStore} from "@/storage/balance/userBalance.js";
 import Load from '@/Widgets/icons/Load.vue';
 
 const load = ref(true);
@@ -15,13 +16,14 @@ onBeforeMount(async () => {
             if(user.data.error_auth){
                 useUserStore().resetUser();
             }
-            if(user.data.id){
-                useUserStore().setUser(user.data);
+            if(user.data.user){
+                useUserBalanceStore().balance = user.data.balance;
+                useUserStore().setUser(user.data.user);
             }
             setTimeout(() => {
                 load.value = false;
             }, 1000);
-        } catch {
+        } catch (error) {
             alert('error server');
         }
     } else {
