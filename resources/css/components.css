@@ -48,3 +48,20 @@
     color: #2980B9;
 }
 
+.btn-purple {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #5d0ec0;
+    padding: 10px;
+    border: 1px solid #5d0ec0;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 14px;
+}
+.btn-purple:hover{
+    background-color: inherit;
+    color: #5d0ec0;
+}
+

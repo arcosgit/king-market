@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Resources\Business;
+namespace App\Http\Resources\Category;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class BusinessResource extends JsonResource
+class SubcategoryResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,8 +15,9 @@ class BusinessResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this->id ?? null,
-            'name' => $this->name ?? null,
+            'subcategory_id' => $this->id,
+            'subcategory_name' => $this->name,
+            'nested_categories' => NestedCategoryResource::collection($this->nestedCategories)->resolve()
         ];
     }
 }

@@ -49,4 +49,13 @@ export default {
     'create': 'Создать',
     'noBrand': "У вас нет бренда",
     'enterBrand': 'Впишите название бренда',
+    'enterCategory': 'Впишите название категории',
+    'enterSubcategory': 'Впишите название подкатегории',
+    'enterNestedSubcategory': 'Впишите название вложенной подкатегории',
+    'category': 'Категория',
+    'subcategories': 'Подкатегории',
+    'nestedSubcategories': 'Вложенные подкатегории',
+    'save': 'Сохранить',
+    'add': 'Добавить',
+    'categoryManagement': 'Управление категориями',
 }

@@ -7,6 +7,7 @@ import UserProfile from '@/Components/user/profile/UserProfile.vue';
 import NoAuth from '@/Components/user/helpers/NoAuth.vue';
 import { ref } from 'vue';
 import BusinessProfile from '@/Components/user/profile/BusinessProfile.vue';
+import AdminProfile from '@/Components/user/profile/AdminProfile.vue'
 
 const profile = ref('user');
 
@@ -22,7 +23,7 @@ const profile = ref('user');
                 <select v-model="profile" class="rounded-[10px] bg-violet-800  p-2 cursor-pointer focus:outline-none">
                     <option value="user">{{ useTranslateStore().t('userProfile') }}</option>
                     <option value="business">{{ useTranslateStore().t('businessProfile') }}</option>
-                    <option value="admin">{{ useTranslateStore().t('adminPanel') }}</option>
+                    <option v-if="useUserStore().roleId == 2" value="admin">{{ useTranslateStore().t('adminPanel') }}</option>
                 </select>
             </div>
             <div v-if="profile == 'user'">
@@ -30,6 +31,9 @@ const profile = ref('user');
             </div>
             <div class="relative" v-if="profile == 'business'">
                 <BusinessProfile></BusinessProfile>
+            </div>
+            <div class="relative" v-if="profile == 'admin'">
+                <AdminProfile></AdminProfile>
             </div>
         </div>
         <div v-else>

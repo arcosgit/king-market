@@ -48,4 +48,13 @@ export default {
     'create': 'Create',
     'noBrand': "You don't have a brand",
     'enterBrand': 'Enter the brand name',
+    'enterCategory': 'Enter the category name',
+    'enterSubcategory': 'Enter the name of the subcategory',
+    'enterNestedSubcategory': 'Enter the name of the nested subcategory',
+    'category': 'Category',
+    'subcategories': 'Subcategories',
+    'nestedSubcategories': 'Nested subcategories',
+    'save': 'Save',
+    'add': 'Add',
+    'categoryManagement': 'Category management',
 };
