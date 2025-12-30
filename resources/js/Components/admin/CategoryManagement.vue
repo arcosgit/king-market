@@ -4,14 +4,17 @@ import axios from "axios";
 import { reactive } from "vue";
 import { route } from "ziggy-js";
 
-const load = reactive({category: false});
-const category = reactive({id: null, findCreateName: '', name: '', subcategories: [], nestedCategories: [], createSuccess: false});
-const categoryErrors = reactive({create: null, find: null});
+const initialСategoryErrors = {create: null, find: null, addSubcategory: null, addNestedSubcategory: null};
+const load = reactive({category: false, add: false});
+const category = reactive({ id: null, findCreateName: '', name: '', subcategories: [], nestedSubcategories: [], activeSubcategoryId: null, createSuccess: false });
+const add = reactive({category: ''});
+const categoryErrors = reactive({ ...initialСategoryErrors });
+
+const resetData = () => { Object.assign(categoryErrors, initialСategoryErrors); add.category = ''; category.subcategories = []; category.nestedSubcategories = []; category.activeSubcategoryId = null; category.id = null; category.name = ''; category.createSuccess = false;};
 
 const createCategory = async () => {
     load.category = true;
-    categoryErrors.create = null;
-    category.createSuccess = false;
+    resetData();
     try{
         await axios.post(route('admin.create.category'), {name: category.findCreateName.trim()});
         setTimeout(() => {
@@ -27,7 +30,7 @@ const createCategory = async () => {
 
 const findCategory = async () => {
     load.category = true;
-    categoryErrors.find = null;
+    resetData();
     try{
         const res = await axios.post(route('admin.find.category'), {name: category.findCreateName});
         setTimeout(() => {
@@ -43,23 +46,64 @@ const findCategory = async () => {
     }
 }
 
-const showNestedCategories = (subcategory_id) => {
+const showNestedSubcategories = (subcategory_id) => {
+    add.category = '';
+    categoryErrors.addSubcategory = null;
+    categoryErrors.addNestedSubcategory = null;
+    if(category.activeSubcategoryId == subcategory_id){
+        category.activeSubcategoryId = null;
+        category.nestedSubcategories = [];
+        return;
+    }
+    category.activeSubcategoryId = subcategory_id;
     const found = category.subcategories.find(item => item.subcategory_id === subcategory_id);
-    category.nestedCategories = found.nested_categories;
-    console.log(category.nestedCategories);
-    // let nestedCategories = [];
-    // for(let i = 0; i < category.subcategories.length; i++){
-    //     if(category.subcategories[i].subcategory_id == subcategory_id){
-    //         nestedCategories = category.subcategories[i].nested_categories;
-    //     }
-    // }
+    category.nestedSubcategories = found.nested_categories;
+}
+
+const addCategoryOrNestedCategory = async () => {
+    load.add = true;
+    categoryErrors.addSubcategory = null;
+    categoryErrors.addNestedSubcategory = null;
+    try{
+        if(category.activeSubcategoryId != null){
+            const res = await axios.patch(route('admin.add.nestedsubcategory'), {subcategory_id: category.activeSubcategoryId, name: add.category});
+            setTimeout(()=>{
+                load.add = false;
+                category.nestedSubcategories.push(res.data);
+                add.category = '';
+            },1000);
+        } else {
+            const res = await axios.patch(route('admin.add.subcategory'), {category_id: category.id, name: add.category});
+            setTimeout(()=>{
+                load.add = false;
+                category.subcategories.push(res.data);
+                add.category = '';
+            },1000);
+        }
+    } catch (error){
+        load.add = false;
+        categoryErrors.addSubcategory = error.response.data.subcategory_exist;
+        categoryErrors.addNestedSubcategory = error.response.data.nested_subcategory_exist;
+    }
+}
+
+const deleteNestedSubcategory = async (nestedSubCategoryId, index) => {
+    const deleteConfirmation = confirm(useTranslateStore().t('deleteNestedSubcategory'));
+    if(deleteConfirmation){
+        try {
+            category.nestedSubcategories.splice(index, 1);
+            await axios.delete(route('admin.delete.nestedsubcategory'), {data: {nested_subcategory_id: nestedSubCategoryId}});
+        } catch(error){
+            alert(error.response.data.errors.nested_subcategory_id[0]);
+        }
+    }
 
 }
 </script>
 <template>
     <div class="pb-3.75">
         <div class="flex items-center gap-x-2.5">
-            <input v-model="category.findCreateName" :readonly="load.category" type="text" class="p-2.25 w-75 h-10 border-2 border-lime-500 rounded-[10px] focus:outline-none" :placeholder="useTranslateStore().t('enterCategory')">
+            <input v-model="category.findCreateName" :readonly="load.category" type="text" class="p-2.25 w-100 h-10 border-2 border-lime-500 rounded-[10px] focus:outline-none" :placeholder="useTranslateStore().t('enterCategory')">
             <button @click.prevent="findCategory" v-if="!load.category" class="btn-blue w-20 h-10">{{ useTranslateStore().t('find') }}</button>
             <button @click.prevent="createCategory" v-if="!load.category" class="btn-purple w-20 h-10">{{ useTranslateStore().t('create') }}</button>
             <div v-if="load.category" class="w-7.5 h-7.5 border-3 text-blue-400 text-4xl animate-spin border-gray-300 flex items-center justify-center border-t-blue-400 rounded-full"></div>
@@ -76,20 +120,25 @@ const showNestedCategories = (subcategory_id) => {
             <div class="items-center flex flex-wrap gap-x-2.5">
                 <div class="mt-2.5">{{ useTranslateStore().t('subcategories') }}</div>
                 <div v-for="subcategory in category.subcategories" :key="subcategory.subcategory_id">
-                    <button @click.prevent="showNestedCategories(subcategory.subcategory_id)" class="btn-dark-gray mt-2.5">{{ subcategory.subcategory_name }}</button>
+                    <button @click.prevent="showNestedSubcategories(subcategory.subcategory_id)" :style="category.activeSubcategoryId === subcategory.subcategory_id ? 'background-color: #395169;' : ''" class="btn-dark-gray mt-2.5">{{ subcategory.subcategory_name }}</button>
                 </div>
+                <div class="text-orange-300 mt-2.5" v-if="category.subcategories.length == 0">{{ useTranslateStore().t('notFound') }}</div>
             </div>
-            <div v-if="category.nestedCategories.length > 0" class="items-center flex flex-wrap gap-x-2.5">
+            <div v-if="category.activeSubcategoryId != null" class="items-center flex flex-wrap gap-x-2.5">
                 <div class="mt-2.5">{{ useTranslateStore().t('nestedSubcategories') }}</div>
-                <div v-for="nestedCategory in category.nestedCategories" :key="nestedCategory.nested_category_id">
-                    <button class="p-2.5 mt-2.5 border border-[#263646] cursor-pointer bg-[#263646] rounded-[10px] hover:border-red-500 hover:text-red-500 hover:bg-inherit hover:line-through transition duration-300">{{ nestedCategory.nested_category_name }}</button>
+                <div v-for="(nestedCategory, index) in category.nestedSubcategories" :key="nestedCategory.nested_category_id">
+                    <button @click.prevent="deleteNestedSubcategory(nestedCategory.nested_category_id, index)" class="p-2.5 mt-2.5 border border-[#263646] cursor-pointer bg-[#263646] rounded-[10px] hover:border-red-500 hover:text-red-500 hover:bg-inherit hover:line-through transition duration-300">{{ nestedCategory.nested_category_name }}</button>
                 </div>
+                <div class="text-orange-300 mt-2.5" v-if="category.nestedSubcategories.length == 0">{{ useTranslateStore().t('notFound') }}</div>
             </div>
-            <div class="flex mt-2.5 gap-x-2.5">
-                <input type="text" class="p-2.25 w-75 h-10 border-2 border-lime-500 rounded-[10px] focus:outline-none" :placeholder="useTranslateStore().t('enterCategory')">
-                <button class="btn-blue w-20 h-10">{{ useTranslateStore().t('add') }}</button>
-                <button class="btn-green w-20 h-10">{{ useTranslateStore().t('save') }}</button>
+            <div class="flex items-center mt-2.5 gap-x-2.5">
+                <input v-model="add.category" type="text" :readonly="load.add" class="p-2.25 w-100 h-10 border-2 border-lime-500 rounded-[10px] focus:outline-none" :placeholder="category.activeSubcategoryId != null ? useTranslateStore().t('enterNestedSubcategory') : useTranslateStore().t('enterSubcategory')">
+                <button v-if="!load.add" @click.prevent="addCategoryOrNestedCategory" class="btn-blue w-20 h-10">{{ useTranslateStore().t('add') }}</button>
+                <div v-if="load.add" class="w-7.5 h-7.5 border-3 text-blue-400 text-4xl animate-spin border-gray-300 flex items-center justify-center border-t-blue-400 rounded-full"></div>
+                <!-- <button class="btn-green w-20 h-10">{{ useTranslateStore().t('save') }}</button> -->
             </div>
+            <div v-if="categoryErrors.addSubcategory" class="text-red-500 mt-2.5">{{ categoryErrors.addSubcategory }}</div>
+            <div v-if="categoryErrors.addNestedSubcategory" class="text-red-500 mt-2.5">{{ categoryErrors.addNestedSubcategory }}</div>
         </div>
     </div>
 </template>

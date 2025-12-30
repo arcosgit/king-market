@@ -57,4 +57,6 @@ export default {
     'save': 'Save',
     'add': 'Add',
     'categoryManagement': 'Category management',
+    'notFound': 'Not found',
+    'deleteNestedSubcategory': 'If you delete it, all products under this nested subcategory will become inactive, are you sure?',
 };
