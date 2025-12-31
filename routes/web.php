@@ -7,5 +7,8 @@ Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('in
 Route::prefix('user')->group(function(){
     require __DIR__.'/user/web.php';
 });
+Route::prefix('product')->group(function(){
+    require __DIR__.'/product/web.php';
+});
 
 

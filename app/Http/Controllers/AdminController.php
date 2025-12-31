@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Admin\AddNestedSubcategoryRequest;
 use App\Http\Requests\Admin\AddSubcategoryRequest;
+use App\Http\Requests\Admin\DeleteCategoryRequest;
 use App\Http\Requests\Admin\DeleteNestedSubcategoryRequest;
+use App\Http\Requests\Admin\DeleteSubcategoryRequest;
 use App\Http\Requests\Admin\FindCategoryRequest;
 use App\Http\Requests\Admin\StoreCategoryRequest;
 use App\Http\Resources\Category\CategoryWithAllNestingsResource;
@@ -55,6 +57,20 @@ class AdminController extends Controller
     {
         $nested_subcategory_id = $request->validated()['nested_subcategory_id'];
         NestedCategoryModel::where('id', $nested_subcategory_id)->delete();
+        return response()->json(['success' => true]);
+    }
+
+    public function deleteSubcategory(DeleteSubcategoryRequest $request)
+    {
+        $subcategory_id = $request->validated()['subcategory_id'];
+        SubcategoryModel::where('id', $subcategory_id)->delete();
+        return response()->json(['success' => true]);
+    }
+
+    public function deleteCategory(DeleteCategoryRequest $request)
+    {
+        $category_id = $request->validated()['category_id'];
+        CategoryModel::where('id', $category_id)->delete();
         return response()->json(['success' => true]);
     }
 }

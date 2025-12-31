@@ -9,5 +9,7 @@ Route::middleware(['set_locale', 'authorized', 'is_admin'])->group(function (){
     Route::patch('/add/subcategory', [App\Http\Controllers\AdminController::class, 'addSubcategory'])->name('admin.add.subcategory');
     Route::patch('/add/nestedsubcategory', [App\Http\Controllers\AdminController::class, 'addNestedSubcategory'])->name('admin.add.nestedsubcategory');
     Route::delete('/delete/nestedsubcategory', [App\Http\Controllers\AdminController::class, 'deleteNestedSubcategory'])->name('admin.delete.nestedsubcategory');
+    Route::delete('/delete/subcategory', [App\Http\Controllers\AdminController::class, 'deleteSubcategory'])->name('admin.delete.subcategory');
+    Route::delete('/delete/category', [App\Http\Controllers\AdminController::class, 'deleteCategory'])->name('admin.delete.category');
 });
 

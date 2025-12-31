@@ -15,3 +15,6 @@ Route::prefix('business')->group(function() {
 Route::prefix('admin')->group(function(){
     require __DIR__.'/admin/api.php';
 });
+Route::prefix('product')->group(function(){
+    require __DIR__.'/product/api.php';
+});
