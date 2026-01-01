@@ -1,7 +1,62 @@
 <script setup>
 import MainLayout from '@/Layout/MainLayout.vue';
 import {useTranslateStore} from "@/storage/lang/translate.js";
+import {useCreateProductStore} from "@/storage/product/create.js";
 import { Head } from '@inertiajs/vue3';
+import Characteristics from '@/Components/product/create/Characteristics.vue';
+import Images from '@/Components/product/create/Images.vue';
+import Categories from '@/Components/product/create/Categories.vue';
+import { reactive } from 'vue';
+import axios from 'axios';
+import { route } from 'ziggy-js';
+
+const initialErrors = {name: null, description: null, price: null, img: null, category: null, characteristic: null};
+const errors = reactive({...initialErrors});
+
+const storeProduct = async () => {
+    Object.assign(errors, initialErrors);
+    if(useCreateProductStore().name.trim() == ''){
+        errors.name = useTranslateStore().t('productNameError');
+        return;
+    }
+    if(useCreateProductStore().description.trim() == ''){
+        errors.description = useTranslateStore().t('productNameError');
+        return;
+    }
+    if(useCreateProductStore().price == ''){
+        errors.price = useTranslateStore().t('productNameError');
+        return;
+    }
+    if(useCreateProductStore().images.length == 0){
+        errors.img = useTranslateStore().t('onePhotoError');
+        return;
+    }
+    if(useCreateProductStore().category.categoryId == null){
+        errors.category = useTranslateStore().t('selectCategory');
+        return;
+    }
+    if(useCreateProductStore().characteristics.length >= 1){
+        for(let i = 0; i < useCreateProductStore().characteristics.length; i++){
+            if(useCreateProductStore().characteristics[i].characteristic_key.trim() == '' || useCreateProductStore().characteristics[i].characteristic_value.trim() == ''){
+                errors.characteristic = useTranslateStore().t('characteristicEmptyError');
+                return;
+            }
+        }
+    }
+    try{
+        const res = await axios.post(route('product.store'), {
+            name: useCreateProductStore().name.trim(),
+            description: useCreateProductStore().description.trim(),
+            price: useCreateProductStore().price,
+            characteristics: useCreateProductStore().characteristics,
+            categories: useCreateProductStore().category,
+        });
+        console.log(res);
+    } catch(error){
+        console.log(error);
+    }
+}
+
 </script>
 <template>
     <Head>
@@ -10,40 +65,22 @@ import { Head } from '@inertiajs/vue3';
     </Head>
     <MainLayout>
         <div class="text-center text-xl font-bold uppercase">{{ useTranslateStore().t('createProduct') }}</div>
-        <input type="text" class="p-2.25 mt-2.5 w-full h-10 border-2 border-lime-500 rounded-[10px] focus:outline-none" :placeholder="useTranslateStore().t('enterProductName')">
-        <textarea class="p-2.25 w-full mt-2.5 min-h-22.5 resize-y max-h-40 border-2 border-lime-500 rounded-[10px] focus:outline-none" :placeholder="useTranslateStore().t('enterProductDescription')"></textarea>
-        <input type="number" class="p-2.25 mt-2.5 w-57.5 h-10 border-2 border-lime-500 rounded-[10px] focus:outline-none" :placeholder="useTranslateStore().t('enterProductPrice')">
-        <div class="text-xl font-bold mt-2.5">{{ useTranslateStore().t('productCharacteristics') }}</div>
-        <div class="opacity-70 text-sm">{{ useTranslateStore().t('forExampleCharacteristics') }}</div>
-        <div class="flex items-center gap-x-2.5 mt-2.5 ">
-            <input type="text" class="p-2.25 w-57.5 h-10 border-2 border-[#2980B9] rounded-[10px] focus:outline-none" :placeholder="useTranslateStore().t('size')">
-            <div class="w-5 h-0.5 bg-white"></div>
-            <input type="text" class="p-2.25 w-57.5 h-10 border-2 border-violet-800 rounded-[10px] focus:outline-none" :placeholder="useTranslateStore().t('24sm')">
-            <img class="w-10 h-10 cursor-pointer rounded-md hover:shadow-[0_0px_15px_0_rgba(255,0,0,1)] transition duration-150" src="/public/img/delete.svg" alt="delete">
-        </div>
-        <button class="btn-green mt-2.5">{{ useTranslateStore().t('add') }}</button>
-        <div class="text-xl font-bold mt-2.5">{{ useTranslateStore().t('productPhotos') }}</div>
-        <div class="opacity-70 text-sm">{{ useTranslateStore().t('rulesForPhotos') }}</div>
-        <div class="flex flex-col w-65 mt-2.5">
-            <div class="text-center">1</div>
-            <img src="/public/img/delete_not_for_project.png" alt="image product">
-        </div>
-        <button class="btn-green mt-2.5">{{ useTranslateStore().t('add') }}</button>
-        <div class="flex gap-x-2.5 mt-2.5 items-center">
-            <div>{{ useTranslateStore().t('windowDisplayPhoto') }}</div>
-            <select class="bg-white text-black rounded-[10px] focus:outline-none h-10 min-w-7 cursor-pointer">
-                <option>1</option>
-                <option>2</option>
-            </select>
-        </div>
-        <select class="bg-[#263646] min-w-57.5 mt-2.5 rounded-[10px] focus:outline-none h-10 cursor-pointer">
-            <option value="" disabled selected hidden>{{ useTranslateStore().t('choiceCategory') }}</option>
-            <option value="1">Вариант 1</option>
-            <option value="2">Вариант 2</option>
-        </select>
+        <input maxlength="255" v-model="useCreateProductStore().name" type="text" class="p-2.25 mt-2.5 w-full h-10 border-2 border-lime-500 rounded-[10px] focus:outline-none" :placeholder="useTranslateStore().t('enterProductName')">
+        <div v-if="errors.name" class="mt-2.5 text-red-500">{{ errors.name }}</div>
+        <textarea maxlength="2000" v-model="useCreateProductStore().description" class="p-2.25 w-full mt-2.5 min-h-22.5 resize-y max-h-40 border-2 border-lime-500 rounded-[10px] focus:outline-none" :placeholder="useTranslateStore().t('enterProductDescription')"></textarea>
+        <div v-if="errors.description" class="mt-2.5 text-red-500">{{ errors.description }}</div>
+        <input v-model="useCreateProductStore().price" type="number" class="p-2.25 mt-2.5 w-57.5 h-10 border-2 border-lime-500 rounded-[10px] focus:outline-none" :placeholder="useTranslateStore().t('enterProductPrice')">
+        <div v-if="errors.price" class="mt-2.5 text-red-500">{{ errors.price }}</div>
+        <Characteristics></Characteristics>
+        <div v-if="errors.characteristic" class="mt-2.5 text-red-500">{{ errors.characteristic }}</div>
+        <Images></Images>
+        <div v-if="errors.img" class="mt-2.5 text-red-500">{{ errors.img }}</div>
+        <Categories></Categories>
+        <div v-if="errors.category" class="mt-2.5 text-red-500">{{ errors.category }}</div>
         <div class="flex gap-x-2.5 mt-2.5">
-            <button class="btn-blue min-w-40">{{ useTranslateStore().t('createProductBtn') }}</button>
-            <button class="btn-purple min-w-40">{{ useTranslateStore().t('productPreview') }}</button>
+            <button @click.prevent="storeProduct" class="btn-blue min-w-40 h-10">{{ useTranslateStore().t('createProductBtn') }}</button>
+            <button class="btn-purple min-w-40 h-10">{{ useTranslateStore().t('productPreview') }}</button>
         </div>
+        <div class="mt-2.5 text-gray-500">{{ useTranslateStore().t('allDataSaveExceptCategory') }}</div>
     </MainLayout>
 </template>
