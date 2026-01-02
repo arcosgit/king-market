@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
             $table->text('img');
-            $table->boolean('is_window_img')->default(false);
             $table->timestamps();
         });
     }
