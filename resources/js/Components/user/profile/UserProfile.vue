@@ -116,9 +116,9 @@ const logout = async () => {
     </div>
     <div class="font-bold text-[20px] mt-2.5">{{ useTranslateStore().t('youLooked') }}</div>
     <div class="flex justify-between flex-wrap mt-2.5">
+        <!-- <Card />
         <Card />
         <Card />
-        <Card />
-        <Card />
+        <Card /> -->
     </div>
 </template>

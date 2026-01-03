@@ -8,6 +8,16 @@ export const useCreateProductStore = defineStore('createProduct', {
         images: [],
         category: {categoryId: null, subcategoryId: null, nestedSubcategoryId: null}
     }),
+    actions: {
+        resetData(){
+            this.name = '';
+            this.description = '';
+            this.price = '';
+            this.characteristics = [{characteristic_key: '', characteristic_value: ''}];
+            this.images = [];
+            this.category = {categoryId: null, subcategoryId: null, nestedSubcategoryId: null};
+        },
+    },
     persist: {
        pick: ['name', 'description', 'price', 'characteristics', 'images']
     }

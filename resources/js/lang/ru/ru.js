@@ -90,4 +90,6 @@ export default {
     'onePhotoError': 'Должно быть минимум одно фото',
     'selectCategory': 'Выберите категорию',
     'characteristicEmptyError': 'Одно или несколько полей не заполнено',
+    'successCreateProduct': 'Товар успешно создан',
+    'createNew': 'Создать новый',
 }

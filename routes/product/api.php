@@ -9,3 +9,9 @@ Route::middleware(['set_locale', 'authorized'])->group(function (){
     Route::delete('/delete/temporary/img', [App\Http\Controllers\ProductController::class, 'deleteTemporaryImg'])->name('product.delete.temporary.img');
 });
 
+Route::middleware('set_locale')->group(function (){
+    Route::post('/home', [App\Http\Controllers\HomeController::class, 'products'])->name('product.home');
+});
+
+
+

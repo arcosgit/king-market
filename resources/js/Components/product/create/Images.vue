@@ -76,10 +76,4 @@ const deleteImg = async (id, index) => {
     <div v-if="load.img" class="w-7.5 h-7.5 border-3 text-blue-400 text-4xl animate-spin border-gray-300 flex items-center justify-center border-t-blue-400 rounded-full"></div>
     <div v-if="errors.fileSize" class="text-red-500 mt-2.5">{{ errors.fileSize }}</div>
     <div v-if="errors.maxImages" class="text-red-500 mt-2.5">{{ errors.maxImages }}</div>
-    <div v-if="useCreateProductStore().images.length >= 1" class="flex gap-x-2.5 mt-2.5 items-center">
-        <div>{{ useTranslateStore().t('windowDisplayPhoto') }}</div>
-        <select class="bg-white text-black rounded-[10px] focus:outline-none h-10 min-w-7 cursor-pointer">
-            <option v-for="(img, index) in useCreateProductStore().images" :key="index">{{ index + 1 }}</option>
-        </select>
-    </div>
 </template>

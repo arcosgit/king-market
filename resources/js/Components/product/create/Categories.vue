@@ -25,7 +25,6 @@ watch(()=>categories.choiceCategoryIndex, () =>{
     const subcategories = categories.all[categories.choiceCategoryIndex].subcategories;
     categories.subcategories = subcategories;
     useCreateProductStore().category.categoryId = categories.all[categories.choiceCategoryIndex].category_id;
-
 });
 
 watch(()=>categories.choiceSubcategoryIndex, (newValue, oldValue) =>{

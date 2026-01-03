@@ -125,12 +125,12 @@ onMounted(async () => {
                 </Link>
             </div>
             <div class="mt-2.5 flex justify-between">
-                <Card>
+                <!-- <Card>
                     <div class="mt-1 flex justify-between">
                         <img class="cursor-pointer rounded-[5px] hover:shadow-[0_0px_15px_0_rgba(41,128,185,1)] transition duration-150" src="/public/img/edit.svg" alt="edit">
                         <img class="cursor-pointer rounded-[5px] hover:shadow-[0_0px_15px_0_rgba(91,33,182,1)] transition duration-150" src="/public/img/statistics.svg" alt="statistic">
                     </div>
-                </Card>
+                </Card> -->
             </div>
         </div>
         <div class="mt-2.5 flex flex-col gap-y-2.5" v-else>

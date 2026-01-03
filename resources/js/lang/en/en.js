@@ -89,4 +89,6 @@ export default {
     'onePhotoError': 'There must be at least one photo',
     'selectCategory': 'Select category',
     'characteristicEmptyError': 'One or more fields are not filled in',
+    'successCreateProduct': 'Product created successfully',
+    'createNew': 'Create new',
 };
