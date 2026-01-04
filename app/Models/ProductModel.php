@@ -13,4 +13,19 @@ class ProductModel extends Model
     {
         return $this->hasOne(ProductImageModel::class, 'product_id', 'id');
     }
+
+    public function images()
+    {
+        return $this->hasMany(ProductImageModel::class, 'product_id', 'id');
+    }
+
+    public function characteristics()
+    {
+        return $this->hasMany(ProductCharacteristicModel::class, 'product_id', 'id');
+    }
+
+    public function business()
+    {
+        return $this->hasOne(BusinessModel::class, 'id', 'business_id');
+    }
 }

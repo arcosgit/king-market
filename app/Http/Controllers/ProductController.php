@@ -7,8 +7,10 @@ use App\Application\Product\UseCases\StoreProductUseCase;
 use App\Http\Requests\Product\DeleteTemporaryImgRequest;
 use App\Http\Requests\Product\StoreProductRequest;
 use App\Http\Requests\Product\TemporarySaveImgRequest;
+use App\Http\Resources\Product\ProductShowResource;
 use App\Infrastructure\Repositories\EloquentProductRepository;
 use App\Models\BusinessModel;
+use App\Models\ProductModel;
 use App\Models\TemporaryProductImageModel;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -19,6 +21,14 @@ class ProductController extends Controller
     public function create()
     {
         return Inertia::render('product/Create');
+    }
+
+    public function show($id)
+    {
+        $product = ProductModel::where('id', $id)->with('images', 'characteristics', 'business')->first();
+        return Inertia::render('product/Show', [
+            'product' => ProductShowResource::make($product)->resolve(),
+        ]);
     }
 
     public function temporarySaveImg(TemporarySaveImgRequest $request)

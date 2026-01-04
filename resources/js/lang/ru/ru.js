@@ -92,4 +92,15 @@ export default {
     'characteristicEmptyError': 'Одно или несколько полей не заполнено',
     'successCreateProduct': 'Товар успешно создан',
     'createNew': 'Создать новый',
+    'article': 'Артикул',
+    'share': 'Поделиться',
+    'addСart': 'Добавить в корзину',
+    'description': 'Описание',
+    'aboutProduct': 'О товаре',
+    'productReviews': 'Отзывы о товаре',
+    'last': 'Последние',
+    'relatedProducts': 'Похожие товары',
+    'articleСopied': 'Артикул скопирован',
+    'linkCopied': 'Ссылка скопирована',
+
 }
