@@ -28,7 +28,7 @@ onMounted(()=>{
         <div class="text-xl font-bold mt-5">{{ useTranslateStore().t('description') }}</div>
         <div class="text-base wrap-break-word">{{ props.product.description }}</div>
         <div class="text-xl font-bold mt-5">{{ useTranslateStore().t('aboutProduct') }}</div>
-        <div v-for="characteristic in props.product.characteristics" class="mt-1"><span class="text-gray">{{ characteristic.characteristic_key }}</span> {{ characteristic.characteristic_value }}</div>
+        <div v-for="(characteristic, index) in props.product.characteristics" :key="index" class="mt-1"><span class="text-gray">{{ characteristic.characteristic_key }}</span> {{ characteristic.characteristic_value }}</div>
         <div class="flex items-center gap-x-2.5 mt-5">
             <div class="text-xl font-bold">{{ useTranslateStore().t('productReviews') }}</div>
             <select class="bg-[#263646] rounded-[10px] h-10 focus:outline-none cursor-pointer">

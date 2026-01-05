@@ -1,11 +1,15 @@
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { route } from 'ziggy-js';
 import TopNotification from '@/Widgets/notification/TopNotification.vue';
 import {useTranslateStore} from "@/storage/lang/translate.js";
+import {useBasketStore} from "@/storage/basket/basket.js";
 
 const props = defineProps({product: Object});
 const copyText = ref('');
+const isProductCard = ref(false);
+
+
 const copy = async (isArticle = false) => {
     if(isArticle){
         await navigator.clipboard.writeText(props.product.id);
@@ -15,6 +19,11 @@ const copy = async (isArticle = false) => {
         copyText.value = useTranslateStore().t('linkCopied');
     }
 }
+
+onMounted(() => {
+    const productCart = useBasketStore().products.find(product => product.product.id === props.product.id) ?? null;
+    if(productCart != null) isProductCard.value = true;
+})
 </script>
 <template>
     <Teleport to="body">
@@ -43,7 +52,8 @@ const copy = async (isArticle = false) => {
         <div class="text-base mt-1">Продавец: <span class="text-violet-800">{{ props.product.brand_name }}</span></div>
         <div class="text-xl text-lime-500">{{ props.product.price }} ₽</div>
         <div class="flex gap-x-2.5 items-center mt-1">
-            <button class="btn-blue w-full h-10">{{ useTranslateStore().t('addСart') }}</button>
+            <button v-if="!isProductCard" @click.prevent="useBasketStore().products.push({quantity: 1, product: props.product}), isProductCard = true" class="btn-blue w-full h-10">{{ useTranslateStore().t('addСart') }}</button>
+            <button v-if="isProductCard" @click.prevent="useBasketStore().deleteFromCart(props.product.id), isProductCard = false" class="border w-full h-10 p-2.5 flex justify-center items-center border-red-500 bg-red-500 rounded-[10px] hover:bg-inherit hover:text-red-500 transition duration-300 cursor-pointer">{{ useTranslateStore().t('deleteСart') }}</button>
             <img class="cursor-pointer rounded-[10px] hover:shadow-[0_0px_15px_0_rgba(255,0,0,1)] transition duration-150" src="/public/img/favorite_red.svg" alt="add favorite">
         </div>
     </div>

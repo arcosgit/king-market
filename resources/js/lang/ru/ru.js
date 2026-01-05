@@ -95,6 +95,7 @@ export default {
     'article': 'Артикул',
     'share': 'Поделиться',
     'addСart': 'Добавить в корзину',
+    'deleteСart': 'Удалить из корзины',
     'description': 'Описание',
     'aboutProduct': 'О товаре',
     'productReviews': 'Отзывы о товаре',
@@ -102,5 +103,6 @@ export default {
     'relatedProducts': 'Похожие товары',
     'articleСopied': 'Артикул скопирован',
     'linkCopied': 'Ссылка скопирована',
+    'quantity': 'Количество',
 
 }

@@ -94,6 +94,7 @@ export default {
     'article': 'Article',
     'share': 'Share',
     'addСart': 'Add to cart',
+    'deleteСart': 'Delete from cart',
     'description': 'Description',
     'aboutProduct': 'About the product',
     'productReviews': 'Product Reviews',
@@ -101,4 +102,5 @@ export default {
     'relatedProducts': 'Related products',
     'articleСopied': 'The article has been copied',
     'linkCopied': 'The link is copied',
+    'quantity': 'Quantity',
 };

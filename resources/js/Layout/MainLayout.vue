@@ -6,6 +6,7 @@ import { route } from 'ziggy-js';
 import {useUserStore} from "@/storage/user/user.js";
 import {useUserBalanceStore} from "@/storage/balance/userBalance.js";
 import Load from '@/Widgets/icons/Load.vue';
+import Basket from '@/Components/basket/Basket.vue';
 
 const load = ref(true);
 
@@ -42,5 +43,6 @@ onBeforeMount(async () => {
         <main class="grow shadow-[0_0px_15px_0_rgba(255,255,255,0.4)] rounded-t-[20px] px-2.5 py-5">
             <slot></slot>
         </main>
+        <Basket></Basket>
     </div>
 </template>

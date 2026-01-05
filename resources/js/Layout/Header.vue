@@ -2,7 +2,7 @@
 import Auth from "@/Components/user/modals/Auth.vue";
 import {useTranslateStore} from "@/storage/lang/translate.js";
 import {useUserStore} from "@/storage/user/user.js";
-import axios from "axios";
+import {useBasketStore} from "@/storage/basket/basket.js";
 import { ref, watch } from "vue";
 import { route } from "ziggy-js";
 
@@ -35,7 +35,7 @@ watch(language, async (newLang, OldLang) =>{
                 <img class="h-5 w-5 block" src="/public/img/favorites.svg" alt="favorites">
                 <div class="text-[14px]">{{ useTranslateStore().t('favorites') }}</div>
             </div>
-            <div class="flex flex-col items-center cursor-pointer w-18.75">
+            <div @click.prevent="useBasketStore().isOpen = !useBasketStore().isOpen" class="flex flex-col items-center cursor-pointer w-18.75">
                 <img class="h-5 w-5 block" src="/public/img/basket.svg" alt="basket">
                 <div class="text-[14px]">{{ useTranslateStore().t('basket') }}</div>
             </div>
