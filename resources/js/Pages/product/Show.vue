@@ -2,15 +2,10 @@
 import MainLayout from '@/Layout/MainLayout.vue';
 import {useTranslateStore} from "@/storage/lang/translate.js";
 import { Head } from '@inertiajs/vue3';
-import { onMounted } from 'vue';
 import Images from '@/Components/product/show/Images.vue'
 import Summary from '@/Components/product/show/Summary.vue'
 
 const props = defineProps({product: Object});
-
-onMounted(()=>{
-    console.log(props.product);
-});
 </script>
 <template>
     <Head>

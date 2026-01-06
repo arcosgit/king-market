@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { route } from 'ziggy-js';
 import TopNotification from '@/Widgets/notification/TopNotification.vue';
 import {useTranslateStore} from "@/storage/lang/translate.js";
@@ -20,10 +20,15 @@ const copy = async (isArticle = false) => {
     }
 }
 
+watch(()=>useBasketStore().products, () =>{
+    const productCart = useBasketStore().products.find(product => product.product.id === props.product.id) ?? null;
+    if(productCart == null) isProductCard.value = false;
+});
+
 onMounted(() => {
     const productCart = useBasketStore().products.find(product => product.product.id === props.product.id) ?? null;
     if(productCart != null) isProductCard.value = true;
-})
+});
 </script>
 <template>
     <Teleport to="body">

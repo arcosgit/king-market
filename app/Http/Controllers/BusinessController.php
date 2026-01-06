@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Business\StoreBusinessRequest;
 use App\Http\Resources\Business\BusinessResource;
+use App\Http\Resources\Product\ProductCardResource;
 use App\Models\BusinessModel;
 use Illuminate\Http\Request;
 
@@ -31,5 +32,11 @@ class BusinessController extends Controller
         $name = $request->validated()['name'];
         BusinessModel::where('user_id', auth()->id())->first()->update(['name' => $name]);
         return response()->json(['success' => true, 'name' => $name]);
+    }
+
+    public function getProducts()
+    {
+        $products = BusinessModel::where('user_id', auth()->id())->with('products', 'products.image')->get()->pluck('products')->flatten();
+        return ProductCardResource::collection($products)->resolve();
     }
 }

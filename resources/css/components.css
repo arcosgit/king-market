@@ -30,6 +30,10 @@
     background-color: inherit;
     color: oklch(76.8% 0.233 130.85);
 }
+.btn-green:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
 
 .btn-blue {
     display: flex;

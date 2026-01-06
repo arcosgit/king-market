@@ -39,10 +39,12 @@ watch(language, async (newLang, OldLang) =>{
                 <img class="h-5 w-5 block" src="/public/img/basket.svg" alt="basket">
                 <div class="text-[14px]">{{ useTranslateStore().t('basket') }}</div>
             </div>
-            <div class="flex flex-col items-center w-18.75">
-                <img class="h-5 w-5 block" src="/public/img/orders.svg" alt="orders">
-                <div class="text-[14px]">{{ useTranslateStore().t('orders') }}</div>
-            </div>
+            <Link :href="route('user.orders')">
+                <div class="flex flex-col items-center w-18.75">
+                    <img class="h-5 w-5 block" src="/public/img/orders.svg" alt="orders">
+                    <div class="text-[14px]">{{ useTranslateStore().t('orders') }}</div>
+                </div>
+            </Link>
             <Link v-if="useUserStore().id != null" :href="route('user.profile')">
                 <div class="flex flex-col items-center w-18.75">
                     <img class="h-5 w-5 block" src="/public/img/profile.svg" alt="profile">

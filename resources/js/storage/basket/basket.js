@@ -7,6 +7,10 @@ export const useBasketStore = defineStore('basket', {
     actions:{
         deleteFromCart(productId){
             this.products = this.products.filter(product => product.product.id !== productId);
+        },
+        resetData(){
+            this.isOpen = false;
+            this.products = [];
         }
     },
     persist: {

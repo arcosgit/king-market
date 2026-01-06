@@ -19,6 +19,7 @@ class ProductCardResource extends JsonResource
             'name' => $this->name,
             'price' => $this->price,
             'img' => url('build/storage/' . $this->image->img),
+            'quantity' => $this->quantity ?? null,
         ];
     }
 }

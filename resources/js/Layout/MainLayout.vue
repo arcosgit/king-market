@@ -11,10 +11,11 @@ import Basket from '@/Components/basket/Basket.vue';
 const load = ref(true);
 
 onBeforeMount(async () => {
-    if(useUserStore().id == null){
+    if(useUserStore().id == null && !useUserStore().isLoginAttempt){
         try{
             const user = await axios.post(route('user.get'));
             if(user.data.error_auth){
+                useUserStore().isLoginAttempt = true;
                 useUserStore().resetUser();
             }
             if(user.data.user){

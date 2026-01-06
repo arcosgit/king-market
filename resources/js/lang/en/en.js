@@ -103,4 +103,11 @@ export default {
     'articleСopied': 'The article has been copied',
     'linkCopied': 'The link is copied',
     'quantity': 'Quantity',
+    'pay': 'Pay',
+    'amountPaid': 'Amount to be paid',
+    'authForPay': 'Log in to pay',
+    'paymentSuccessful': 'Payment was successful',
+    'notEnoughMoney': 'Not enough money',
+    'ordersDescription': 'On this page, you can see all your orders.',
+    'order': 'Order',
 };

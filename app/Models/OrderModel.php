@@ -4,13 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class BusinessModel extends Model
+class OrderModel extends Model
 {
-    protected $table = 'business';
+    protected $table = 'orders';
+
     protected $guarded = [];
 
     public function products()
     {
-        return $this->hasMany(ProductModel::class, 'business_id', 'id');
+        return $this->hasMany(OrderProductModel::class, 'order_id', 'id');
     }
 }

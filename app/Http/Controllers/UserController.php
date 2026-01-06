@@ -11,8 +11,10 @@ use App\Http\Requests\User\ChangeLangRequest;
 use App\Http\Requests\User\ChangeUserEmailRequest;
 use App\Http\Requests\User\ChangeUserNameRequest;
 use App\Http\Requests\User\ChangeUserPasswordRequest;
+use App\Http\Resources\User\OrderUserResource;
 use App\Http\Resources\User\UserResource;
 use App\Models\BalanceModel;
+use App\Models\OrderModel;
 use App\Models\UserModel;
 use Auth;
 use Hash;
@@ -26,14 +28,6 @@ class UserController extends Controller
     {
         return Inertia::render('user/Profile');
     }
-
-    // public function changeLang(ChangeLangRequest $request)
-    // {
-    //     $data = $request->validated();
-    //     app()->setLocale($data['lang']);
-    //     session(['locale' => $data['lang']]);
-    //     return response()->json(['success' => true]);
-    // }
 
     public function getUser()
     {
@@ -87,6 +81,22 @@ class UserController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return response()->json(['success' => true]);
+    }
+
+    public function orders()
+    {
+        return Inertia::render('user/Orders');
+    }
+
+    public function getOrders()
+    {
+        $orders = OrderModel::where('user_id', auth()->id())->with('products', 'products.product')->get()
+        ->each(function ($order) {
+            $order->products->each(function ($orderProduct) {
+                $orderProduct->product->quantity = $orderProduct->quantity;
+            });
+        });
+        return OrderUserResource::collection($orders)->resolve();
     }
 
 }

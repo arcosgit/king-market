@@ -104,5 +104,12 @@ export default {
     'articleСopied': 'Артикул скопирован',
     'linkCopied': 'Ссылка скопирована',
     'quantity': 'Количество',
+    'pay': 'Оплатить',
+    'amountPaid': 'Сумма к оплате',
+    'authForPay': 'Авторизуйтесь для оплаты',
+    'paymentSuccessful': 'Оплата прошла успешно',
+    'notEnoughMoney': 'Недостаточно средств',
+    'ordersDescription': 'На данной странице, вы можете увидеть все ваши заказы',
+    'order': 'Заказ',
 
 }

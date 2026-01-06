@@ -1,11 +1,15 @@
 import { defineStore } from "pinia";
 import {useUserBalanceStore} from "@/storage/balance/userBalance.js";
+import {useBasketStore} from "@/storage/basket/basket.js";
+import {useBusinessStore} from "@/storage/business/business.js";
+import {useCreateProductStore} from "@/storage/product/create.js";
 export const useUserStore = defineStore('user', {
     state: () => ({
         id: null,
         name: null,
         email: null,
         roleId: null,
+        isLoginAttempt: false,
     }),
     actions: {
         setUser(user){
@@ -21,6 +25,9 @@ export const useUserStore = defineStore('user', {
             this.email = null;
             this.roleId = null;
             useUserBalanceStore().balance = 0;
+            useBasketStore().resetData();
+            useBusinessStore().resetData();
+            useCreateProductStore().resetData();
         }
     }
 });
