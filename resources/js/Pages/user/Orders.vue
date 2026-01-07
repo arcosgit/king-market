@@ -11,20 +11,27 @@ import Card from '@/Components/product/Card.vue';
 import Review from '@/Components/order/modals/Review.vue';
 
 
-const orders = reactive({data: [], page: 1, allOrdersLoaded: false});
+const orders = reactive({data: [], nextCursor: null, allOrdersLoaded: false, isLoading: false});
 const reviewModal = reactive({show: false, product: null});
 
 const getOrders = async () => {
-    if(useUserStore().id == null || orders.allOrdersLoaded) return;
+    if(useUserStore().id == null || orders.allOrdersLoaded || orders.isLoading) return;
+    orders.isLoading = true;
     try{
-        const res = await axios.post(route('user.get.orders', { page: orders.page }));
-        for (const order of res.data) {
+        const params = orders.nextCursor ? { cursor: orders.nextCursor } : {};
+        const res = await axios.post(route('user.get.orders'), params);
+        for (const order of res.data.data) {
             order.show = false;
         }
-        orders.data.push(...res.data);
-        if(res.data.length == 0) orders.allOrdersLoaded = true;
+        orders.data.push(...res.data.data);
+        orders.nextCursor = res.data.next_cursor;
+        if(!res.data.has_more || !res.data.next_cursor) {
+            orders.allOrdersLoaded = true;
+        }
     } catch(error){
         alert('error server');
+    } finally {
+        orders.isLoading = false;
     }
 }
 
@@ -43,7 +50,6 @@ const handleScroll = () => {
     const scrollHeight = document.documentElement.scrollHeight;
     const clientHeight = window.innerHeight;
     if(scrollTop + clientHeight >= scrollHeight){
-        orders.page += 1;
         getOrders();
     }
 }
@@ -61,7 +67,10 @@ const newReview = (event) => {
 
 watch(()=>useUserStore().id, (newValue, oldValue) => {
     if(newValue != null){
-       getOrders();
+        orders.data = [];
+        orders.nextCursor = null;
+        orders.allOrdersLoaded = false;
+        getOrders();
     }
 });
 

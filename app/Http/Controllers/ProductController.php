@@ -9,13 +9,17 @@ use App\Application\Product\UseCases\StoreProductUseCase;
 use App\Http\Requests\Product\BuyProductRequest;
 use App\Http\Requests\Product\CreateReviewProductRequest;
 use App\Http\Requests\Product\DeleteTemporaryImgRequest;
+use App\Http\Requests\Product\ReviewsProductRequest;
 use App\Http\Requests\Product\StoreProductRequest;
 use App\Http\Requests\Product\TemporarySaveImgRequest;
+use App\Http\Resources\Product\ProductCardResource;
+use App\Http\Resources\Product\ProductReviewResource;
 use App\Http\Resources\Product\ProductShowResource;
 use App\Infrastructure\Repositories\EloquentBalanceRepository;
 use App\Infrastructure\Repositories\EloquentOrderRepository;
 use App\Infrastructure\Repositories\EloquentProductRepository;
 use App\Models\BusinessModel;
+use App\Models\ProductCategoryModel;
 use App\Models\ProductModel;
 use App\Models\ProductReviewModel;
 use App\Models\TemporaryProductImageModel;
@@ -32,9 +36,38 @@ class ProductController extends Controller
 
     public function show($id)
     {
-        $product = ProductModel::where('id', $id)->with('images', 'characteristics', 'business')->first();
         return Inertia::render('product/Show', [
-            'product' => ProductShowResource::make($product)->resolve(),
+            'product_id' => $id,
+        ]);
+    }
+
+    public function showProduct(Request $request){
+        $product_id = $request->validate(['product_id' => ['required', 'integer', 'exists:products,id']])['product_id'];
+        $product = ProductModel::where('id', $product_id)->with('images', 'characteristics', 'business', 'reviews', 'categories')->first();
+        $similar_products = ProductModel::where('id', '!=', $product_id)->whereHas('categories', function ($query) use ($product) {
+            $cat = $product->categories;
+            $query->when($cat->category_id !== null, fn ($q) => $q->where('category_id', $cat->category_id))
+                ->when($cat->subcategory_id !== null, fn ($q) => $q->orWhere('subcategory_id', $cat->subcategory_id))
+                ->when($cat->nested_subcategory_id !== null, fn ($q) => $q->orWhere('nested_subcategory_id', $cat->nested_subcategory_id));
+            })->with('image', 'reviews')->cursorPaginate(30);
+        return response()->json([
+            'products' => ProductShowResource::make($product)->resolve(),
+            'similar_product' => ProductCardResource::collection($similar_products)->resolve(),
+        ]);
+    }
+
+    public function reviews(ReviewsProductRequest $request){
+        $data = $request->validated();
+        $cursor = $request->input('cursor');
+        $query = ProductReviewModel::where('product_id', $data['product_id'])->with('user');
+        if($data['rating'] != 'last'){
+            $query->where('rating', $data['rating']);
+        }
+        $reviews = $query->orderByDesc('created_at')->cursorPaginate(20, ['*'], 'cursor', $cursor);
+        return response()->json([
+            'data' => ProductReviewResource::collection($reviews)->resolve(),
+            'next_cursor' => $reviews->nextCursor()?->encode(),
+            'has_more' => $reviews->hasMorePages(),
         ]);
     }
 

@@ -88,13 +88,16 @@ class UserController extends Controller
         return Inertia::render('user/Orders');
     }
 
-    public function getOrders()
+    public function getOrders(Request $request)
     {
-        $orders = OrderModel::where('user_id', auth()->id())
-            ->with('products', 'products.product', 'products.product.userReview', 'products.product.image')
-            ->orderByDesc('created_at')
-            ->paginate(30);
-        return OrderUserResource::collection($orders)->resolve();
+        $cursor = $request->input('cursor');
+        $orders = OrderModel::where('user_id', auth()->id())->with('products', 'products.product', 'products.product.userReview', 'products.product.image')->orderByDesc('created_at')
+            ->cursorPaginate(30, ['*'], 'cursor', $cursor);
+        return response()->json([
+            'data' => OrderUserResource::collection($orders)->resolve(),
+            'next_cursor' => $orders->nextCursor()?->encode(),
+            'has_more' => $orders->hasMorePages(),
+        ]);
     }
 
 }

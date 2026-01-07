@@ -8,4 +8,9 @@ class ProductCategoryModel extends Model
 {
     protected $table = 'product_categories';
     protected $guarded = [];
+
+    public function product()
+    {
+        return $this->hasOne(ProductModel::class, 'id', 'product_id');
+    }
 }

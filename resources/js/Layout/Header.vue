@@ -11,8 +11,6 @@ const showAuthModalFlag = ref(false);
 watch(language, async (newLang, OldLang) =>{
     useTranslateStore().currentLang = newLang;
     window.axios.defaults.headers.common['X-Lang'] = newLang;
-    // const res = await axios.post(route('user.change.lang'), {lang: newLang});
-    // console.log(res);
 });
 </script>
 <template>

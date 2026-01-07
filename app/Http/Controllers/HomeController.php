@@ -22,9 +22,14 @@ class HomeController extends Controller
         return CategoryWithAllNestingsResource::collection($categories)->resolve();
     }
 
-    public function products()
+    public function products(Request $request)
     {
-        $products = ProductModel::with('image')->get();
-        return ProductCardResource::collection($products)->resolve();
+        $cursor = $request->input('cursor');
+        $products = ProductModel::with('image', 'reviews')->orderBy('created_at')->cursorPaginate(30, ['*'], 'cursor', $cursor);
+        return response()->json([
+            'data' => ProductCardResource::collection($products)->resolve(),
+            'next_cursor' => $products->nextCursor()?->encode(),
+            'has_more' => $products->hasMorePages(),
+        ]);
     }
 }

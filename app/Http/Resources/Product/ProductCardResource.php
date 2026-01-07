@@ -19,6 +19,8 @@ class ProductCardResource extends JsonResource
             'name' => $this->name,
             'price' => $this->price,
             'img' => url('build/storage/' . $this->image->img),
+            'rating_average' => $this->reviews()->count() > 0 ? (int) $this->reviews()->sum('rating') / (int) $this->reviews()->count() : null,
+            'reviews_count' => $this->reviews()->count() != 0 ? $this->reviews()->count() . ' ' . trans_choice(__('product.reviews_quantity'), $this->reviews()->count()) : null,
             'quantity' => $this->quantity ?? null,
             'review_text' => $this?->userReview?->review,
             'review_rating' => $this?->userReview?->rating,

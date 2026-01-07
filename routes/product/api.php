@@ -13,6 +13,8 @@ Route::middleware(['set_locale', 'authorized'])->group(function (){
 
 Route::middleware('set_locale')->group(function (){
     Route::post('/home', [App\Http\Controllers\HomeController::class, 'products'])->name('product.home');
+    Route::post('/show', [App\Http\Controllers\ProductController::class, 'showProduct'])->name('product.get');
+    Route::post('/reviews', [App\Http\Controllers\ProductController::class, 'reviews'])->name('product.get.reviews');
 });
 
 

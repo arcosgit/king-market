@@ -32,4 +32,13 @@ class ProductModel extends Model
     public function userReview(){
         return $this->hasOne(ProductReviewModel::class, 'product_id', 'id')->where('user_id', auth()->id());
     }
+
+    public function reviews(){
+        return $this->hasMany(ProductReviewModel::class, 'product_id', 'id');
+    }
+
+    public function categories()
+    {
+        return $this->hasOne(ProductCategoryModel::class, 'product_id', 'id');
+    }
 }

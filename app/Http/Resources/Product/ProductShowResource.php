@@ -22,7 +22,9 @@ class ProductShowResource extends JsonResource
             'brand_id' => $this->business_id,
             'brand_name' => $this->business->name,
             'images' => ProductImageResource::collection($this->images)->resolve(),
-            'characteristics' => ProductCharacteristicResource::collection($this->characteristics)->resolve()
+            'characteristics' => ProductCharacteristicResource::collection($this->characteristics)->resolve(),
+            'rating_average' => $this->reviews()->count() > 0 ? (int) $this->reviews()->sum('rating') / (int) $this->reviews()->count() : null,
+            'reviews_count' => $this->reviews()->count() != 0 ? $this->reviews()->count() . ' ' . trans_choice(__('product.reviews_quantity'), $this->reviews()->count()) : null,
         ];
     }
 }

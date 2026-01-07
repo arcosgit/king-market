@@ -20,9 +20,38 @@ createInertiaApp({
     app
       .use(plugin)
       .use(ZiggyVue)
-      .use(pinia)
-      .mount(el);
-    window.axios.defaults.headers.common['X-Lang'] = useTranslateStore().currentLang;
+      .use(pinia);
+    
+    const translateStore = useTranslateStore();
+    let initialLang = 'ru'; // значение по умолчанию
+    try {
+        const stored = localStorage.getItem('translate');
+        if(stored) {
+            const parsed = JSON.parse(stored);
+            if(parsed.currentLang) {
+                initialLang = parsed.currentLang;
+            }
+        }
+    } catch(e) {
+        initialLang = translateStore.currentLang;
+    }
+    const lang = translateStore.currentLang || initialLang;
+    window.axios.defaults.headers.common['X-Lang'] = lang;
+    window.axios.interceptors.request.use(function (config) {
+        const store = useTranslateStore();
+        if(store && store.currentLang) {
+            config.headers['X-Lang'] = store.currentLang;
+        }
+        return config;
+    }, function (error) {
+        return Promise.reject(error);
+    });
+    translateStore.$subscribe((mutation, state) => {
+        if(state && state.currentLang) {
+            window.axios.defaults.headers.common['X-Lang'] = state.currentLang;
+        }
+    });
+    app.mount(el);
   },
 
 });

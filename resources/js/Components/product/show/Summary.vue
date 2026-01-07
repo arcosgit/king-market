@@ -48,11 +48,14 @@ onMounted(() => {
             </div>
         </div>
         <div class="text-xl font-bold mt-1 wrap-break-word">{{ props.product.name }}</div>
-        <div class="flex gap-1.25 mt-1">
+        <div v-if="props.preview || props.product.reviews_count == null" class="flex gap-1.25 mt-1">
+            <div class="text-gray">{{ useTranslateStore().t('no_reviews') }}</div>
+        </div>
+        <div v-if="!props.preview && props.product.reviews_count != null" class="flex gap-x-1.25 items-center">
             <img src="/public/img/star_gold.svg" alt="rating">
-            <div>4.5</div>
+            <div>{{ props.product.rating_average }}</div>
             <img src="/public/img/comment.svg" alt="reviews">
-            <div class="text-gray">2 отзыва</div>
+            <div class="text-gray">{{ props.product.reviews_count }}</div>
         </div>
         <div v-if="!props.preview" class="text-base mt-1">{{ useTranslateStore().t('seller') }}: <span class="text-violet-800">{{ props.product.brand_name}}</span></div>
         <div v-else class="text-base mt-1">{{ useTranslateStore().t('seller') }}: <span class="text-violet-800">{{ useTranslateStore().t('yourBrand')}}</span></div>

@@ -123,4 +123,8 @@ export default {
     'reviewRequired': 'Отзыв обязателен',
     'ratingRequired': 'Оценка обязательна',
     'editReview': 'Изменить отзыв',
+    'no_reviews': 'Нет отзывов',
+    'productNotFound': 'Товар не найден или больше не существует.',
+    'home': 'На главную',
+    'loadMore': 'Загрузить ещё',
 }

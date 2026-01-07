@@ -122,4 +122,8 @@ export default {
     'reviewRequired': 'Review required',
     'ratingRequired': 'Rating required',
     'editReview': 'Edit review',
+    'no_reviews': 'No reviews',
+    'productNotFound': 'The product was not found or no longer exists.',
+    'home': 'Home',
+    'loadMore': 'Load more',
 };
