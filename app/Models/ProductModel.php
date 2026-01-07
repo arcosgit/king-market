@@ -28,4 +28,8 @@ class ProductModel extends Model
     {
         return $this->hasOne(BusinessModel::class, 'id', 'business_id');
     }
+
+    public function userReview(){
+        return $this->hasOne(ProductReviewModel::class, 'product_id', 'id')->where('user_id', auth()->id());
+    }
 }

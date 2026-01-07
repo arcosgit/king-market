@@ -38,10 +38,10 @@ onBeforeMount(async () => {
         <Load text="load"></Load>
     </div>
     <div v-else class="container mx-auto flex flex-col gap-y-10 h-full relative animate-opacity-in">
-        <div class="sticky top-0 z-10 bg-dark">
+        <div class="fixed container z-10 bg-dark">
             <Header></Header>
         </div>
-        <main class="grow shadow-[0_0px_15px_0_rgba(255,255,255,0.4)] rounded-t-[20px] px-2.5 py-5">
+        <main class="grow shadow-[0_0px_15px_0_rgba(255,255,255,0.4)] rounded-t-[20px] px-2.5 py-5 mt-32.5">
             <slot></slot>
         </main>
         <Basket></Basket>

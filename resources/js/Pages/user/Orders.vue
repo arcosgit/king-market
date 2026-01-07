@@ -4,47 +4,101 @@ import {useTranslateStore} from "@/storage/lang/translate.js";
 import {useUserStore} from "@/storage/user/user.js";
 import { Head } from '@inertiajs/vue3';
 import NoAuth from '@/Components/user/helpers/NoAuth.vue';
-import { onMounted, reactive, ref } from 'vue';
+import { onMounted, onUnmounted, reactive, watch } from 'vue';
 import axios from 'axios';
 import { route } from 'ziggy-js';
+import Card from '@/Components/product/Card.vue';
+import Review from '@/Components/order/modals/Review.vue';
 
 
-const test = ref(false);
-const orders = reactive({data: []});
+const orders = reactive({data: [], page: 1, allOrdersLoaded: false});
+const reviewModal = reactive({show: false, product: null});
+
 const getOrders = async () => {
-    // if(useUserStore().id == null) return;
+    if(useUserStore().id == null || orders.allOrdersLoaded) return;
     try{
-        const res = await axios.post(route('user.get.orders'));
-        orders.data = res.data;
-        console.log(orders.data);
+        const res = await axios.post(route('user.get.orders', { page: orders.page }));
+        for (const order of res.data) {
+            order.show = false;
+        }
+        orders.data.push(...res.data);
+        if(res.data.length == 0) orders.allOrdersLoaded = true;
     } catch(error){
         alert('error server');
     }
 }
 
+const openReviewModal = (product) => {
+    reviewModal.product = product;
+    reviewModal.show = true;
+};
+
+const closeReviewModal = () => {
+    reviewModal.show = false;
+    reviewModal.product = null;
+};
+
+const handleScroll = () => {
+    const scrollTop = window.scrollY;
+    const scrollHeight = document.documentElement.scrollHeight;
+    const clientHeight = window.innerHeight;
+    if(scrollTop + clientHeight >= scrollHeight){
+        orders.page += 1;
+        getOrders();
+    }
+}
+
+const newReview = (event) => {
+    for (const order of orders.data) {
+        for (const product of order.products){
+            if(product.id === event.product_id){
+                product.review_text = event.review_text;
+                product.review_rating = event.review_rating;
+            }
+        }
+    }
+}
+
+watch(()=>useUserStore().id, (newValue, oldValue) => {
+    if(newValue != null){
+       getOrders();
+    }
+});
+
 onMounted(() =>{
     getOrders();
-})
-
+    window.addEventListener('scroll', handleScroll);
+});
+onUnmounted(()=>{window.removeEventListener('scroll', handleScroll);});
 </script>
 <template>
     <Head>
         <title>{{ useTranslateStore().t('orders') }}</title>
         <meta name="description" :content="useTranslateStore().t('ordersDescription')">
     </Head>
+    <Review :show="reviewModal.show" :product="reviewModal.product" @close="closeReviewModal" @new_review="newReview($event)"></Review>
     <MainLayout>
         <div v-if="useUserStore().id != null">
             <div class="uppercase text-xl text-center">{{ useTranslateStore().t('orders') }}</div>
-            <div class="mt-5 transition-all duration-300 bg-dark shadow-[0_0px_15px_0_rgba(255,255,255,0.4)] rounded-[10px]">
+            <div v-for="(order, indexOrder) in orders.data" :key="indexOrder" class="mt-5 transition-all duration-300 bg-dark shadow-[0_0px_15px_0_rgba(255,255,255,0.4)] rounded-[10px]">
                 <div class="px-2.5 py-3.75 flex justify-between items-center">
-                    <div class="text-xl max-w-303.75 wrap-break-word">{{ useTranslateStore().t('order') }} - <span class="text-violet-800">100</span></div>
-                    <img @click.prevent="test = !test" :class="{ 'rotate-180': test }" class="cursor-pointer block transition duration-150" src="/public/img/arrow.svg" alt="open"/>
+                    <div class="text-xl max-w-303.75 wrap-break-word">{{ useTranslateStore().t('order') }} - <span class="text-violet-800">{{ order.id }}</span></div>
+                    <img @click.prevent="order.show = !order.show" :class="{ 'rotate-180': order.show }" class="cursor-pointer block transition duration-150" src="/public/img/arrow.svg" alt="open"/>
                 </div>
-                <div :class="['px-2.5 overflow-hidden', test ? 'grid grid-rows-[1fr] transition-all duration-300' : 'grid grid-rows-[0fr] transition-all duration-300']">
+                <div :class="['px-2.5 overflow-hidden', order.show ? 'grid grid-rows-[1fr] transition-all duration-300' : 'grid grid-rows-[0fr] transition-all duration-300']">
                     <div class="overflow-hidden">
-                        <div>dsadsa</div>
-                        <div>dsadsa</div>
-                        <div>dsadsa</div>
+                        <div class="flex flex-wrap gap-x-5 gap-y-2.5 items-center">
+                            <div v-for="(product, indexProduct) in order.products" :key="indexProduct">
+                                <Card :product="product">
+                                    <div class="text-blue">{{ useTranslateStore().t('quantity') }}: {{ product.quantity }}</div>
+                                    <button @click.prevent="openReviewModal(product)" class="btn-purple mt-1 h-7.5">{{ product.review_text == null ? useTranslateStore().t('leaveFeedback'): useTranslateStore().t('editReview') }}</button>
+                                </Card>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center mt-2.5 mb-2.5">
+                            <div class="text-lime-500">{{ useTranslateStore().t('totalAmount') }}: <span class="text-lime-500">{{ order.total_cost }}₽</span></div>
+                            <div class="text-gray">{{ useTranslateStore().t('date') }}: {{ order.created_at }}</div>
+                        </div>
                     </div>
                 </div>
             </div>

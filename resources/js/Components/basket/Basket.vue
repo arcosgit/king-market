@@ -89,7 +89,7 @@ onMounted(() => {
                     <div class="text-base mt-2.5">{{ useTranslateStore().t('balance') }}: <span class="wrap-break-word text-blue">{{ useUserBalanceStore().balance }}₽</span></div>
                     <div v-if="errors.notEnoughMoney" class="text-red-500 mt-2.5">{{ errors.notEnoughMoney }}</div>
                     <div class="w-full flex mt-2.5" :class="!load ? 'justify-end' : 'justify-center'">
-                        <button v-if="!load" @click.prevent="buy" :disabled="isDisabledPayBtn" class="btn-green h-10">{{ useTranslateStore().t('pay') }}</button>
+                        <button v-if="!load && !isDisabledPayBtn" @click.prevent="buy" class="btn-green h-10">{{ useTranslateStore().t('pay') }}</button>
                         <div v-if="load" class="w-7.5 h-7.5 border-3 text-blue-400 text-4xl animate-spin border-gray-300 flex items-center justify-center border-t-blue-400 rounded-full"></div>
                     </div>
                 </div>

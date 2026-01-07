@@ -90,12 +90,10 @@ class UserController extends Controller
 
     public function getOrders()
     {
-        $orders = OrderModel::where('user_id', auth()->id())->with('products', 'products.product')->get()
-        ->each(function ($order) {
-            $order->products->each(function ($orderProduct) {
-                $orderProduct->product->quantity = $orderProduct->quantity;
-            });
-        });
+        $orders = OrderModel::where('user_id', auth()->id())
+            ->with('products', 'products.product', 'products.product.userReview', 'products.product.image')
+            ->orderByDesc('created_at')
+            ->paginate(30);
         return OrderUserResource::collection($orders)->resolve();
     }
 

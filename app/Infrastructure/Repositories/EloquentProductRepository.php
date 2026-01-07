@@ -59,4 +59,9 @@ class EloquentProductRepository implements ProductRepositoryInterface
 
         ProductImageModel::insert($productImages);
     }
+
+    public function getPricesByIds(array $productIds): array
+    {
+        return ProductModel::whereIn('id', $productIds)->pluck('price', 'id')->toArray();
+    }
 }

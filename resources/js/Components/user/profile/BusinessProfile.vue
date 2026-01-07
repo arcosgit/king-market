@@ -21,6 +21,7 @@ const getBusiness = async () => {
         useBusinessStore().name = business.data.name;
         setTimeout(() => {
             useBusinessStore().id = business.data.id;
+            load.main = false;
             getProducts();
         },1000);
     } catch (error){
@@ -33,7 +34,6 @@ const getProducts = async () => {
     try{
         const res = await axios.post(route('business.products'));
         useBusinessStore().products = res.data;
-        load.main = false;
     } catch(error){
         alert("error can't find products");
     }

@@ -5,7 +5,7 @@ import TopNotification from '@/Widgets/notification/TopNotification.vue';
 import {useTranslateStore} from "@/storage/lang/translate.js";
 import {useBasketStore} from "@/storage/basket/basket.js";
 
-const props = defineProps({product: Object});
+const props = defineProps({product: Object, preview: {type: Boolean, default: false}});
 const copyText = ref('');
 const isProductCard = ref(false);
 
@@ -38,11 +38,11 @@ onMounted(() => {
     </Teleport>
     <div class="min-w-90 max-w-90 rounded-[20px] shadow-[0_0px_15px_0_rgba(255,255,255,0.4)] p-2.5">
         <div class="flex justify-between items-center">
-            <div @click.prevent="copy(true)" class="flex gap-x-1 items-center cursor-pointer">
+            <div @click.prevent="props.preview ? '': copy(true)" class="flex gap-x-1 items-center cursor-pointer">
                 <img src="/public/img/copy.svg" alt="copy">
-                <div class="text-gray text-[12px]">{{ useTranslateStore().t('article') }}: {{ props.product.id }}</div>
+                <div class="text-gray text-[12px]">{{ useTranslateStore().t('article') }}: {{ props.product.id ?? 'preview' }}</div>
             </div>
-            <div @click.prevent="copy(false)" class="flex gap-x-1 items-center cursor-pointer">
+            <div @click.prevent="props.preview ? '': copy(false)" class="flex gap-x-1 items-center cursor-pointer">
                 <img src="/public/img/share.svg" alt="share">
                 <div class="text-gray text-[12px]">{{ useTranslateStore().t('share') }}</div>
             </div>
@@ -54,11 +54,16 @@ onMounted(() => {
             <img src="/public/img/comment.svg" alt="reviews">
             <div class="text-gray">2 отзыва</div>
         </div>
-        <div class="text-base mt-1">Продавец: <span class="text-violet-800">{{ props.product.brand_name }}</span></div>
+        <div v-if="!props.preview" class="text-base mt-1">{{ useTranslateStore().t('seller') }}: <span class="text-violet-800">{{ props.product.brand_name}}</span></div>
+        <div v-else class="text-base mt-1">{{ useTranslateStore().t('seller') }}: <span class="text-violet-800">{{ useTranslateStore().t('yourBrand')}}</span></div>
         <div class="text-xl text-lime-500">{{ props.product.price }} ₽</div>
-        <div class="flex gap-x-2.5 items-center mt-1">
+        <div v-if="!props.preview" class="flex gap-x-2.5 items-center mt-1">
             <button v-if="!isProductCard" @click.prevent="useBasketStore().products.push({quantity: 1, product: props.product}), isProductCard = true" class="btn-blue w-full h-10">{{ useTranslateStore().t('addСart') }}</button>
             <button v-if="isProductCard" @click.prevent="useBasketStore().deleteFromCart(props.product.id), isProductCard = false" class="border w-full h-10 p-2.5 flex justify-center items-center border-red-500 bg-red-500 rounded-[10px] hover:bg-inherit hover:text-red-500 transition duration-300 cursor-pointer">{{ useTranslateStore().t('deleteСart') }}</button>
+            <img class="cursor-pointer rounded-[10px] hover:shadow-[0_0px_15px_0_rgba(255,0,0,1)] transition duration-150" src="/public/img/favorite_red.svg" alt="add favorite">
+        </div>
+        <div v-else class="flex gap-x-2.5 items-center mt-1">
+            <button class="btn-blue w-full h-10">{{ useTranslateStore().t('addСart') }}</button>
             <img class="cursor-pointer rounded-[10px] hover:shadow-[0_0px_15px_0_rgba(255,0,0,1)] transition duration-150" src="/public/img/favorite_red.svg" alt="add favorite">
         </div>
     </div>

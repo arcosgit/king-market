@@ -29,7 +29,7 @@ const temporarySaveImg = async (event) => {
         const formData = new FormData();
         formData.append('img', file);
         const res = await axios.post(route('product.temporary.save.img'), formData);
-        useCreateProductStore().images.push({img_id: res.data.img_id, path: res.data.path});
+        useCreateProductStore().images.push({img_id: res.data.img_id, img: res.data.path});
     } catch(error){
         errors.fileSize = error.response.data.errors.img[0];
     }
@@ -57,7 +57,7 @@ const deleteImg = async (id, index) => {
         <div v-for="(img, index) in useCreateProductStore().images" :key="index" class="flex flex-col w-65 mt-2.5">
             <div class="text-center text-xl">{{ index + 1 }}</div>
             <div v-if="load.deleteImgId != img.img_id" @click.prevent="deleteImg(img.img_id, index)" class="relative max-w-65 max-h-65 min-w-65 min-h-65 rounded-[10px] overflow-hidden cursor-pointer">
-                <img class="w-full h-full object-cover object-center" :src="img.path" alt="image product" />
+                <img class="w-full h-full object-cover object-center" :src="img.img" alt="image product" />
                 <div class="absolute inset-0 opacity-0 hover:opacity-100 transition-opacity duration-200 bg-red-500/30 flex items-center justify-center">
                     <svg class="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
                         <line x1="0" y1="0" x2="100" y2="100" stroke="red" stroke-width="3" />

@@ -17,11 +17,16 @@ class OrderUserResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $products = $this->products->map(function ($orderProduct) {
+            $product = $orderProduct->product;
+            $product->quantity = $orderProduct->quantity;
+            return $product;
+        });
         return [
             'id' => $this->id,
             'total_cost' => $this->total_cost,
             'created_at' => Carbon::parse($this->created_at, 'Europe/Moscow')->format('d.m.Y'),
-            'products' => ProductCardResource::collection($this->products->pluck('product'))->resolve(),
+            'products' => ProductCardResource::collection($products)->resolve(),
         ];
     }
 }

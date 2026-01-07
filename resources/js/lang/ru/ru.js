@@ -111,5 +111,16 @@ export default {
     'notEnoughMoney': 'Недостаточно средств',
     'ordersDescription': 'На данной странице, вы можете увидеть все ваши заказы',
     'order': 'Заказ',
-
+    'totalAmount': 'Общая сумма',
+    'date': 'Дата',
+    'seller': 'Продавец',
+    'yourBrand': 'Ваш бренд',
+    'backСreation': 'Вернуться к созданию',
+    'leaveFeedback': 'Оставить отзыв',
+    'enterReview': 'Введите ваш отзыв',
+    'review': 'Отзыв',
+    'send': 'Отправить',
+    'reviewRequired': 'Отзыв обязателен',
+    'ratingRequired': 'Оценка обязательна',
+    'editReview': 'Изменить отзыв',
 }

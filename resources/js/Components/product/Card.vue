@@ -2,7 +2,7 @@
 const props = defineProps({product: Object, flexEnabled: {type: Boolean, default: false}});
 </script>
 <template>
-    <div v-if="!props.flexEnabled" class="max-w-65 w-65">
+    <div v-if="!props.flexEnabled" class="max-w-65 w-65 min-h-96">
         <Link :href="route('product.show', props.product.id)" :class="{'flex': props.flexEnabled}">
             <img class="w-full h-65 object-cover object-center rounded-[10px]" :src="props.product.img" alt="product image">
             <div class="flex items-center text-lime-500 text-xl">

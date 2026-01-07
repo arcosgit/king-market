@@ -2,6 +2,7 @@
 
 use App\Http\Middleware\AuthMiddleware;
 use App\Http\Middleware\IsAdminMiddleware;
+use App\Http\Middleware\isUserAuthAndBusinessMiddleware;
 use App\Http\Middleware\SetLocaleMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -20,6 +21,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'authorized' => AuthMiddleware::class,
             'set_locale' => SetLocaleMiddleware::class,
             'is_admin' => IsAdminMiddleware::class,
+            'is_user_auth_and_have_business' => isUserAuthAndBusinessMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

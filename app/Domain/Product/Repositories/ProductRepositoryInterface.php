@@ -9,4 +9,5 @@ interface ProductRepositoryInterface
     public function storeCategories(int $productId, array $categories): void;
     public function storeCharacteristics(int $productId, array $characteristics): void;
     public function storeImages(int $productId, array $images): void;
+    public function getPricesByIds(array $productIds): array;
 }
