@@ -127,4 +127,6 @@ export default {
     'productNotFound': 'Товар не найден или больше не существует.',
     'home': 'На главную',
     'loadMore': 'Загрузить ещё',
+    'favoriteProducts': 'Избранные товары',
+    'favoriteProductsDescription': 'Здесь находятся избранные товары, которые вы выбрали',
 }

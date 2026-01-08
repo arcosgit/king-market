@@ -25,6 +25,7 @@ class CreateReviewProductRequest extends FormRequest
             'product_id' => ['required', 'integer', 'exists:products,id'],
             'rating' => ['required', 'integer', 'min:1', 'max:5'],
             'review' => ['required', 'string', 'max:2000'],
+            'order_id' => ['required', 'integer', 'exists:orders,id'],
         ];
     }
 }

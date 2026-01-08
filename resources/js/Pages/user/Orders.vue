@@ -12,7 +12,7 @@ import Review from '@/Components/order/modals/Review.vue';
 
 
 const orders = reactive({data: [], nextCursor: null, allOrdersLoaded: false, isLoading: false});
-const reviewModal = reactive({show: false, product: null});
+const reviewModal = reactive({show: false, product: null, orderId: null});
 
 const getOrders = async () => {
     if(useUserStore().id == null || orders.allOrdersLoaded || orders.isLoading) return;
@@ -35,14 +35,16 @@ const getOrders = async () => {
     }
 }
 
-const openReviewModal = (product) => {
+const openReviewModal = (product, orderId) => {
     reviewModal.product = product;
     reviewModal.show = true;
+    reviewModal.orderId = orderId;
 };
 
 const closeReviewModal = () => {
     reviewModal.show = false;
     reviewModal.product = null;
+    reviewModal.orderId = null;
 };
 
 const handleScroll = () => {
@@ -85,7 +87,7 @@ onUnmounted(()=>{window.removeEventListener('scroll', handleScroll);});
         <title>{{ useTranslateStore().t('orders') }}</title>
         <meta name="description" :content="useTranslateStore().t('ordersDescription')">
     </Head>
-    <Review :show="reviewModal.show" :product="reviewModal.product" @close="closeReviewModal" @new_review="newReview($event)"></Review>
+    <Review :show="reviewModal.show" :product="reviewModal.product" :orderId="reviewModal.orderId" @close="closeReviewModal" @new_review="newReview($event)"></Review>
     <MainLayout>
         <div v-if="useUserStore().id != null">
             <div class="uppercase text-xl text-center">{{ useTranslateStore().t('orders') }}</div>
@@ -100,7 +102,7 @@ onUnmounted(()=>{window.removeEventListener('scroll', handleScroll);});
                             <div v-for="(product, indexProduct) in order.products" :key="indexProduct">
                                 <Card :product="product">
                                     <div class="text-blue">{{ useTranslateStore().t('quantity') }}: {{ product.quantity }}</div>
-                                    <button @click.prevent="openReviewModal(product)" class="btn-purple mt-1 h-7.5">{{ product.review_text == null ? useTranslateStore().t('leaveFeedback'): useTranslateStore().t('editReview') }}</button>
+                                    <button @click.prevent="openReviewModal(product, order.id)" class="btn-purple mt-1 h-7.5">{{ product.review_text == null ? useTranslateStore().t('leaveFeedback'): useTranslateStore().t('editReview') }}</button>
                                 </Card>
                             </div>
                         </div>

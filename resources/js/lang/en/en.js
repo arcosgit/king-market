@@ -126,4 +126,6 @@ export default {
     'productNotFound': 'The product was not found or no longer exists.',
     'home': 'Home',
     'loadMore': 'Load more',
+    'favoriteProducts': 'Favorite products',
+    'favoriteProductsDescription': 'Here are your favorite products that you have selected',
 };

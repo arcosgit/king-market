@@ -25,7 +25,6 @@ const getProduct = async () => {
             product.value = res.data.products;
             similarProducts.value = res.data.similar_product;
             load.value = false;
-            console.log(res);
         },500);
     } catch(e){
         errorProduct.value = true;

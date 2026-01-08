@@ -24,6 +24,7 @@ class ProductCardResource extends JsonResource
             'quantity' => $this->quantity ?? null,
             'review_text' => $this?->userReview?->review,
             'review_rating' => $this?->userReview?->rating,
+            'is_favorite' => $this->favorite,
         ];
     }
 }

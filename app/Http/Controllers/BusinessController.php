@@ -36,7 +36,7 @@ class BusinessController extends Controller
 
     public function getProducts()
     {
-        $products = BusinessModel::where('user_id', auth()->id())->with('products', 'products.image')->get()->pluck('products')->flatten();
+        $products = BusinessModel::where('user_id', auth()->id())->with('products', 'products.image', 'products.favorite')->get()->pluck('products')->flatten();
         return ProductCardResource::collection($products)->resolve();
     }
 }

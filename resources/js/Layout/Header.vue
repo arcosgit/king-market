@@ -29,10 +29,12 @@ watch(language, async (newLang, OldLang) =>{
                 <option value="ru">RU</option>
                 <option value="en">EN</option>
             </select>
-            <div class="flex flex-col items-center w-18.75">
-                <img class="h-5 w-5 block" src="/public/img/favorites.svg" alt="favorites">
-                <div class="text-[14px]">{{ useTranslateStore().t('favorites') }}</div>
-            </div>
+            <Link :href="route('user.favorite.product')">
+                <div class="flex flex-col items-center w-18.75">
+                    <img class="h-5 w-5 block" src="/public/img/favorites.svg" alt="favorites">
+                    <div class="text-[14px]">{{ useTranslateStore().t('favorites') }}</div>
+                </div>
+            </Link>
             <div @click.prevent="useBasketStore().isOpen = !useBasketStore().isOpen" class="flex flex-col items-center cursor-pointer w-18.75">
                 <img class="h-5 w-5 block" src="/public/img/basket.svg" alt="basket">
                 <div class="text-[14px]">{{ useTranslateStore().t('basket') }}</div>

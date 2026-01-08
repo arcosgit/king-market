@@ -6,7 +6,7 @@ import axios from 'axios';
 import { route } from 'ziggy-js';
 import Load from '@/Widgets/icons/Load.vue';
 
-const props = defineProps({show: Boolean, product: Object});
+const props = defineProps({show: Boolean, product: Object, orderId: Number});
 const emit = defineEmits(['close', 'new_review']);
 const review = reactive({text: '', rating: 5});
 const load = ref(false);
@@ -38,7 +38,7 @@ const submitReview = async () => {
     }
     load.value = true;
     try{
-        await axios.post(route('product.create.update.review'), {product_id: props.product.id, rating: review.rating, review: review.text});
+        await axios.post(route('product.create.update.review'), {product_id: props.product.id, rating: review.rating, review: review.text, order_id: props.orderId});
         setTimeout(() => {
             load.value = false;
             success.value = useTranslateStore().t('success');
@@ -48,7 +48,7 @@ const submitReview = async () => {
     } catch (error){
         alert(error.response.data.errors.product_id[0]);
     }
-    
+
 };
 
 </script>

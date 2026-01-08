@@ -53,4 +53,9 @@ class UserModel extends Authenticatable
     {
         return $this->hasOne(BalanceModel::class, 'user_id', 'id');
     }
+
+    public function favorite()
+    {
+        return $this->belongsToMany(ProductModel::class, 'product_favorite', 'user_id', 'product_id');
+    }
 }

@@ -25,7 +25,7 @@ class HomeController extends Controller
     public function products(Request $request)
     {
         $cursor = $request->input('cursor');
-        $products = ProductModel::with('image', 'reviews')->orderBy('created_at')->cursorPaginate(30, ['*'], 'cursor', $cursor);
+        $products = ProductModel::with('image', 'reviews', 'favorite')->orderBy('created_at')->cursorPaginate(30, ['*'], 'cursor', $cursor);
         return response()->json([
             'data' => ProductCardResource::collection($products)->resolve(),
             'next_cursor' => $products->nextCursor()?->encode(),

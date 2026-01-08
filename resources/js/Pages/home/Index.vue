@@ -58,8 +58,8 @@ onUnmounted(() => {
         <meta name="description" :content="useTranslateStore().t('descriptionHome')">
     </Head>
     <MainLayout>
-        <div class="flex justify-between flex-wrap">
-            <div v-for="(product, index) in products.data" :key="index">
+        <div class="grid gap-x-13.5 grid-cols-5 max-2xl:grid-cols-4 max-2xl:gap-x-18.5 max-xl:grid-cols-3 max-xl:gap-x-27.75 max-lg:grid-cols-2 max-lg:gap-x-57 max-md:grid-cols-1">
+            <div v-for="(product, index) in products.data" :key="index" class="max-md:place-items-center">
                 <Card :product="product"></Card>
             </div>
         </div>

@@ -6,7 +6,7 @@ import { route } from 'ziggy-js';
 import { onMounted, reactive } from 'vue';
 import BrandStatistic from '../../business/BrandStatistic.vue';
 import Create from '../../business/Create.vue';
-import BusinessProducts from '../../business/BusinessProducts.vue'
+import BusinessProducts from '../../business/BusinessProducts.vue';
 
 
 const load = reactive({main: true});
@@ -33,6 +33,7 @@ const getProducts = async () => {
     if(useBusinessStore().id == null) return;
     try{
         const res = await axios.post(route('business.products'));
+        useBusinessStore().products = [];
         useBusinessStore().products = res.data;
     } catch(error){
         alert("error can't find products");

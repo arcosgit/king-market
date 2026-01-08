@@ -11,10 +11,13 @@ use App\Http\Requests\User\ChangeLangRequest;
 use App\Http\Requests\User\ChangeUserEmailRequest;
 use App\Http\Requests\User\ChangeUserNameRequest;
 use App\Http\Requests\User\ChangeUserPasswordRequest;
+use App\Http\Resources\Product\ProductCardResource;
 use App\Http\Resources\User\OrderUserResource;
 use App\Http\Resources\User\UserResource;
 use App\Models\BalanceModel;
 use App\Models\OrderModel;
+use App\Models\ProductFavoriteModel;
+use App\Models\ProductModel;
 use App\Models\UserModel;
 use Auth;
 use Hash;
@@ -97,6 +100,33 @@ class UserController extends Controller
             'data' => OrderUserResource::collection($orders)->resolve(),
             'next_cursor' => $orders->nextCursor()?->encode(),
             'has_more' => $orders->hasMorePages(),
+        ]);
+    }
+
+    public function favoriteProductsShow()
+    {
+        return Inertia::render('user/Favorite');
+    }
+
+    public function favoriteProductAction(Request $request)
+    {
+        $product_id = $request->validate(['product_id' => ['required', 'integer', 'exists:products,id']])['product_id'];
+        $product_favorite = ProductFavoriteModel::where('user_id', auth()->id())->where('product_id', $product_id)->first();
+        if($product_favorite == null){
+            ProductFavoriteModel::create(['user_id' => auth()->id(), 'product_id' => $product_id]);
+        } else {
+            $product_favorite->delete();
+        }
+        return response()->json(['success' => true]);
+    }
+
+    public function getFavorite()
+    {
+        $products = ProductModel::whereHas('favorite')->with('image', 'reviews')->cursorPaginate(30);
+        return response()->json([
+            'data' => ProductCardResource::collection($products)->resolve(),
+            'next_cursor' => $products->nextCursor()?->encode(),
+            'has_more' => $products->hasMorePages(),
         ]);
     }
 

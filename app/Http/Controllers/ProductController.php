@@ -19,6 +19,8 @@ use App\Infrastructure\Repositories\EloquentBalanceRepository;
 use App\Infrastructure\Repositories\EloquentOrderRepository;
 use App\Infrastructure\Repositories\EloquentProductRepository;
 use App\Models\BusinessModel;
+use App\Models\OrderModel;
+use App\Models\OrderProductModel;
 use App\Models\ProductCategoryModel;
 use App\Models\ProductModel;
 use App\Models\ProductReviewModel;
@@ -43,7 +45,7 @@ class ProductController extends Controller
 
     public function showProduct(Request $request){
         $product_id = $request->validate(['product_id' => ['required', 'integer', 'exists:products,id']])['product_id'];
-        $product = ProductModel::where('id', $product_id)->with('images', 'characteristics', 'business', 'reviews', 'categories')->first();
+        $product = ProductModel::where('id', $product_id)->with('images', 'characteristics', 'business', 'reviews', 'categories', 'favorite')->first();
         $similar_products = ProductModel::where('id', '!=', $product_id)->whereHas('categories', function ($query) use ($product) {
             $cat = $product->categories;
             $query->when($cat->category_id !== null, fn ($q) => $q->where('category_id', $cat->category_id))
@@ -130,6 +132,10 @@ class ProductController extends Controller
 
     public function createReview(CreateReviewProductRequest $request){
         $data = $request->validated();
+        $isProductBought = OrderProductModel::where('order_id', $data['order_id'])->where('product_id', $data['product_id'])->first();
+        if($isProductBought == null){
+            return response()->json(['error_product' => __('product.product_review_not_bought')], 422);
+        }
         ProductReviewModel::updateOrCreate(
         ['product_id' => $data['product_id'], 'user_id' => auth()->id()],
         ['review' => $data['review'], 'rating' => $data['rating']]);

@@ -15,5 +15,7 @@ Route::middleware(['set_locale', 'authorized'])->group(function (){
     Route::patch('/topup/balance', [App\Http\Controllers\UserController::class, 'topUpBalance'])->name('user.topup.balance');
     Route::post('/logout', [App\Http\Controllers\UserController::class, 'logout'])->name('user.logout');
     Route::post('/orders', [App\Http\Controllers\UserController::class, 'getOrders'])->name('user.get.orders');
+    Route::post('/favorite', [App\Http\Controllers\UserController::class, 'favoriteProductAction'])->name('user.favorite.product.action');
+    Route::post('/get/favorite', [App\Http\Controllers\UserController::class, 'getFavorite'])->name('user.get.favorite');
 });
 
