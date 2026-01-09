@@ -9,7 +9,7 @@ import Categories from '@/Components/product/create/Categories.vue';
 import { reactive, ref } from 'vue';
 import axios from 'axios';
 import { route } from 'ziggy-js';
-import ImagesPrevie from '@/Components/product/show/Images.vue';
+import ImagesPreview from '@/Components/product/show/Images.vue';
 import Summary from '@/Components/product/show/Summary.vue';
 
 const load = reactive({create: false});
@@ -118,7 +118,7 @@ const showPreview = () => {
         </div>
         <div v-else>
             <div class="flex justify-between gap-x-5 w-full items-start">
-                <ImagesPrevie :images="useCreateProductStore().images"></ImagesPrevie>
+                <ImagesPreview :images="useCreateProductStore().images"></ImagesPreview>
                 <Summary :product="useCreateProductStore()" :preview="true"></Summary>
                 <div class="w-full h-125 rounded-[20px] shadow-[0_0px_15px_0_rgba(255,255,255,0.4)] p-2.5">
                     <div class="text-base font-bold text-center">{{ useTranslateStore().t('relatedProducts') }}</div>

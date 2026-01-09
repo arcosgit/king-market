@@ -9,19 +9,20 @@ use App\Application\Product\UseCases\StoreProductUseCase;
 use App\Http\Requests\Product\BuyProductRequest;
 use App\Http\Requests\Product\CreateReviewProductRequest;
 use App\Http\Requests\Product\DeleteTemporaryImgRequest;
+use App\Http\Requests\Product\EditProductRequest;
 use App\Http\Requests\Product\ReviewsProductRequest;
 use App\Http\Requests\Product\StoreProductRequest;
 use App\Http\Requests\Product\TemporarySaveImgRequest;
 use App\Http\Resources\Product\ProductCardResource;
+use App\Http\Resources\Product\ProductEditResource;
 use App\Http\Resources\Product\ProductReviewResource;
 use App\Http\Resources\Product\ProductShowResource;
 use App\Infrastructure\Repositories\EloquentBalanceRepository;
 use App\Infrastructure\Repositories\EloquentOrderRepository;
 use App\Infrastructure\Repositories\EloquentProductRepository;
 use App\Models\BusinessModel;
-use App\Models\OrderModel;
 use App\Models\OrderProductModel;
-use App\Models\ProductCategoryModel;
+use App\Models\ProductImageModel;
 use App\Models\ProductModel;
 use App\Models\ProductReviewModel;
 use App\Models\TemporaryProductImageModel;
@@ -140,5 +141,26 @@ class ProductController extends Controller
         ['product_id' => $data['product_id'], 'user_id' => auth()->id()],
         ['review' => $data['review'], 'rating' => $data['rating']]);
         return response()->json(['succes' => true]);
+    }
+
+    public function edit(Request $request)
+    {
+        $product = $request->attributes->get('product');
+        return Inertia::render('product/Edit', ['product' => ProductEditResource::make($product)->resolve()]);
+    }
+
+    public function editSave(EditProductRequest $request)
+    {
+        $product = $request->attributes->get('product');
+        $data = $request->validated();
+        return $product;
+    }
+
+    public function saveImg(TemporarySaveImgRequest $request, $id)
+    {
+        $img = $request->validated()['img'];
+        $path = Storage::disk('public')->put('/images', $img);
+        $img_hide = ProductImageModel::create(['product_id' => $id, 'img' => $path, 'hide' => true]);
+        return response()->json(['img_id' => $img_hide->id, 'path' => url('build/storage/' . $path), 'hide' => true]);
     }
 }

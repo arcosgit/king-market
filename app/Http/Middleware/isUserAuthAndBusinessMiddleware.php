@@ -8,7 +8,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class isUserAuthAndBusinessMiddleware
+class IsUserAuthAndBusinessMiddleware
 {
     /**
      * Handle an incoming request.
@@ -24,6 +24,7 @@ class isUserAuthAndBusinessMiddleware
         if($bussines == null){
             return redirect()->route('user.profile');
         }
+        $request->attributes->set('user_bussines', $bussines);
         return $next($request);
     }
 }

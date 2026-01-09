@@ -128,4 +128,7 @@ export default {
     'loadMore': 'Load more',
     'favoriteProducts': 'Favorite products',
     'favoriteProductsDescription': 'Here are your favorite products that you have selected',
+    'deleteProduct': 'Remove product',
+    'editProductBtn': 'Edit product',
+    'editProduct': 'Edit product',
 };

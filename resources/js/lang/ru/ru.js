@@ -129,4 +129,7 @@ export default {
     'loadMore': 'Загрузить ещё',
     'favoriteProducts': 'Избранные товары',
     'favoriteProductsDescription': 'Здесь находятся избранные товары, которые вы выбрали',
+    'deleteProduct': 'Удалить товар',
+    'editProductBtn': 'Редактировать товар',
+    'editProduct': 'Редактирование товара',
 }
