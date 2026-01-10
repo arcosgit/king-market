@@ -9,6 +9,7 @@ export const useEditProductStore = defineStore('editProduct', {
         images: [],
         category: {categoryId: null, subcategoryId: null, nestedSubcategoryId: null},
         categoryConst: {categoryId: null, subcategoryId: null, nestedSubcategoryId: null},
+        showFamiliarization: true,
     }),
     actions: {
         resetData(){
@@ -27,4 +28,7 @@ export const useEditProductStore = defineStore('editProduct', {
             this.categoryConst.nestedSubcategoryId = category.nested_subcategory_id;
         }
     },
+    persist: {
+        pick: ['showFamiliarization']
+    }
 });

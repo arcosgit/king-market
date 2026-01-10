@@ -6,13 +6,14 @@ use App\Http\Requests\Business\StoreBusinessRequest;
 use App\Http\Resources\Business\BusinessResource;
 use App\Http\Resources\Product\ProductCardResource;
 use App\Models\BusinessModel;
+use App\Models\ProductModel;
 use Illuminate\Http\Request;
 
 class BusinessController extends Controller
 {
     public function getBusiness()
     {
-        $business = BusinessModel::where('user_id', auth()->id())->first();
+        $business = BusinessModel::where('user_id', auth()->id())->withCount('products')->first();
         return BusinessResource::make($business)->resolve();
     }
 
@@ -36,7 +37,13 @@ class BusinessController extends Controller
 
     public function getProducts()
     {
-        $products = BusinessModel::where('user_id', auth()->id())->with('products', 'products.image', 'products.favorite')->get()->pluck('products')->flatten();
-        return ProductCardResource::collection($products)->resolve();
+        $business = BusinessModel::where('user_id', auth()->id())->first();
+        $products = ProductModel::where('business_id', $business->id)->with('image', 'reviews', 'favorite')
+        ->orderByDesc('created_at')->cursorPaginate(20);
+        return response()->json([
+            'data' => ProductCardResource::collection($products)->resolve(),
+            'next_cursor' => $products->nextCursor()?->encode(),
+            'has_more' => $products->hasMorePages(),
+        ]);
     }
 }

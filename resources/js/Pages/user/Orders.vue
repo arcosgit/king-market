@@ -100,10 +100,16 @@ onUnmounted(()=>{window.removeEventListener('scroll', handleScroll);});
                     <div class="overflow-hidden">
                         <div class="flex flex-wrap gap-x-5 gap-y-2.5 items-center">
                             <div v-for="(product, indexProduct) in order.products" :key="indexProduct">
-                                <Card :product="product">
-                                    <div class="text-blue">{{ useTranslateStore().t('quantity') }}: {{ product.quantity }}</div>
-                                    <button @click.prevent="openReviewModal(product, order.id)" class="btn-purple mt-1 h-7.5">{{ product.review_text == null ? useTranslateStore().t('leaveFeedback'): useTranslateStore().t('editReview') }}</button>
-                                </Card>
+                                <div v-if="!product.no_product">
+                                    <Card :product="product">
+                                        <div class="text-blue">{{ useTranslateStore().t('quantity') }}: {{ product.quantity }}</div>
+                                        <button @click.prevent="openReviewModal(product, order.id)" class="btn-purple mt-1 h-7.5">{{ product.review_text == null ? useTranslateStore().t('leaveFeedback'): useTranslateStore().t('editReview') }}</button>
+                                    </Card>
+                                </div>
+                                <div v-else class="flex flex-col justify-center items-center max-w-65 w-65 min-h-65">
+                                    <img class="w-65 h-65" src="/public/img/no_product.png" alt="no product">
+                                    <div>{{ useTranslateStore().t('productNoExists') }}</div>
+                                </div>
                             </div>
                         </div>
                         <div class="flex justify-between items-center mt-2.5 mb-2.5">

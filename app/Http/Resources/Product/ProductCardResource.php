@@ -14,6 +14,11 @@ class ProductCardResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        if(!isset($this->id)){
+            return [
+                'no_product' => true,
+            ];
+        }
         return [
             'id' => $this->id,
             'name' => $this->name,

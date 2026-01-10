@@ -17,6 +17,7 @@ Route::middleware('set_locale')->group(function (){
     Route::post('/reviews', [App\Http\Controllers\ProductController::class, 'reviews'])->name('product.get.reviews');
     Route::post('/save/img/{id}', [App\Http\Controllers\ProductController::class, 'saveImg'])->name('product.save.img')->middleware(['is_user_auth_and_have_business', 'is_user_owner_product']);
     Route::post('/edit/{id}', [App\Http\Controllers\ProductController::class, 'editSave'])->name('product.edit.save')->middleware(['is_user_auth_and_have_business', 'is_user_owner_product']);
+    Route::delete('/delete/{id}', [App\Http\Controllers\ProductController::class, 'deleteProduct'])->name('product.delete')->middleware(['is_user_auth_and_have_business', 'is_user_owner_product']);
 });
 
 

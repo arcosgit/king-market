@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Application\Product\DTOs\BuyProductData;
+use App\Application\Product\DTOs\EditProductData;
 use App\Application\Product\DTOs\StoreProductData;
 use App\Application\Product\UseCases\BuyProductUseCase;
+use App\Application\Product\UseCases\EditProductUseCase;
 use App\Application\Product\UseCases\StoreProductUseCase;
 use App\Http\Requests\Product\BuyProductRequest;
 use App\Http\Requests\Product\CreateReviewProductRequest;
@@ -151,10 +153,29 @@ class ProductController extends Controller
 
     public function editSave(EditProductRequest $request)
     {
+        $data = EditProductData::fromRequest($request);
         $product = $request->attributes->get('product');
-        $data = $request->validated();
-        return $product;
+        $use_case = new EditProductUseCase(new EloquentProductRepository);
+        try {
+            $result = $use_case->execute($data, $product->id);
+            return response()->json($result);
+        } catch(\Exception $e){
+            $error_message = $e->getMessage();
+            return response()->json(['error' => $error_message], 422);
+        }
     }
+
+    public function deleteProduct(Request $request)
+    {
+        $product = $request->attributes->get('product');
+        $images = ProductImageModel::where('product_id', $product->id)->get();
+        foreach ($images as $image) {
+            Storage::disk('public')->delete($image->img);
+        }
+        $product->delete();
+        return response()->json(['success' => true]);
+    }
+
 
     public function saveImg(TemporarySaveImgRequest $request, $id)
     {

@@ -7,6 +7,7 @@ use App\Models\ProductCategoryModel;
 use App\Models\ProductCharacteristicModel;
 use App\Models\ProductImageModel;
 use App\Models\ProductModel;
+use Storage;
 
 class EloquentProductRepository implements ProductRepositoryInterface
 {
@@ -58,6 +59,40 @@ class EloquentProductRepository implements ProductRepositoryInterface
         }, $images);
 
         ProductImageModel::insert($productImages);
+    }
+
+    public function update(Product $product): void
+    {
+        ProductModel::where('id', $product->id())->update(['name' => $product->name(), 'description' => $product->description(), 'price' => $product->price()->getPrice()]);
+    }
+
+     public function updateCategories(int $productId, array $categories): void
+     {
+        ProductCategoryModel::where('product_id', $productId)->update([
+            'category_id' => $categories['categoryId'],
+            'subcategory_id' => $categories['subcategoryId'],
+            'nested_subcategory_id' => $categories['nestedSubcategoryId']
+            ]);
+     }
+
+     public function deleteCharacteristics(int $productId): void
+     {
+        ProductCharacteristicModel::where('product_id', $productId)->delete();
+     }
+
+    public function updateImages(int $productId, array $imageIds): void
+    {
+        $imageIdsToKeep = collect($imageIds)->pluck('img_id')->toArray();
+        $currentImages = ProductImageModel::where('product_id', $productId);
+        $idsToDelete = array_diff($currentImages->pluck('id')->toArray(), $imageIdsToKeep);
+        if(!empty($idsToDelete)){
+            $imagesToDelete = ProductImageModel::whereIn('id', $idsToDelete);
+            foreach ($imagesToDelete->get() as $image) {
+                Storage::disk('public')->delete($image->img);
+            }
+            $imagesToDelete->delete();
+        }
+        $currentImages->update(['hide' => false]);
     }
 
     public function getPricesByIds(array $productIds): array

@@ -3,13 +3,14 @@ import axios from 'axios';
 import Load from '@/Widgets/icons/Load.vue';
 import {useBusinessStore} from "@/storage/business/business.js";
 import { route } from 'ziggy-js';
-import { onMounted, reactive } from 'vue';
+import { onMounted, onUnmounted, reactive } from 'vue';
 import BrandStatistic from '../../business/BrandStatistic.vue';
 import Create from '../../business/Create.vue';
 import BusinessProducts from '../../business/BusinessProducts.vue';
 
 
 const load = reactive({main: true});
+const productPagination = reactive({nextCursor: null, allProductsLoaded: false, isLoading: false});
 
 const getBusiness = async () => {
     if(useBusinessStore().id != null){
@@ -21,28 +22,54 @@ const getBusiness = async () => {
         useBusinessStore().name = business.data.name;
         setTimeout(() => {
             useBusinessStore().id = business.data.id;
+            useBusinessStore().productsQuantity = business.data.products_quantity;
+            useBusinessStore().sales = business.data.sales;
+            useBusinessStore().rating = business.data.average_rating;
+            useBusinessStore().reviews = business.data.quantity_reviews;
             load.main = false;
             getProducts();
         },1000);
     } catch (error){
-        console.log(error);
+        alert('error server');
     }
 }
 
 const getProducts = async () => {
-    if(useBusinessStore().id == null) return;
+    if(useBusinessStore().id == null || productPagination.allProductsLoaded || productPagination.isLoading) return;
+    productPagination.isLoading = true;
     try{
-        const res = await axios.post(route('business.products'));
-        useBusinessStore().products = [];
-        useBusinessStore().products = res.data;
+        const params = productPagination.nextCursor ? { cursor: productPagination.nextCursor } : {};
+        const res = await axios.post(route('business.products'), params);
+        useBusinessStore().products.push(...res.data.data);
+        productPagination.nextCursor = res.data.next_cursor;
+        if(!res.data.has_more || !res.data.next_cursor) {
+            productPagination.allProductsLoaded = true;
+        }
     } catch(error){
         alert("error can't find products");
+    } finally{
+        productPagination.isLoading = false;
+    }
+}
+
+const handleScroll = () => {
+    const scrollTop = window.scrollY;
+    const scrollHeight = document.documentElement.scrollHeight;
+    const clientHeight = window.innerHeight;
+    if(scrollTop + clientHeight >= scrollHeight){
+        getProducts();
     }
 }
 
 onMounted(async () => {
     await getBusiness();
     getProducts();
+    window.addEventListener('scroll', handleScroll);
+});
+
+onUnmounted(() => {
+    useBusinessStore().products = [];
+    window.removeEventListener('scroll', handleScroll);
 });
 </script>
 <template>

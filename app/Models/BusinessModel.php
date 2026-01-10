@@ -13,4 +13,22 @@ class BusinessModel extends Model
     {
         return $this->hasMany(ProductModel::class, 'business_id', 'id');
     }
+
+    public function getTotalSoldQuantityAttribute()
+    {
+        return OrderProductModel::whereHas('product', function ($query) {
+            $query->where('business_id', $this->id);
+        })->sum('quantity');
+    }
+
+    public function getTotalRatingReviewsAttribute()
+    {
+        $reviews = ProductReviewModel::whereHas('product', function($query){
+            $query->where('business_id', $this->id);
+        });
+        return [
+            'average_rating' => floor($reviews->sum('rating') / $reviews->count() * 10) / 10,
+            'quantity_reviews' => $reviews->count(),
+        ];
+    }
 }

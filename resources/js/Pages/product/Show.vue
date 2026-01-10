@@ -53,8 +53,6 @@ const getReviews = async () => {
         } else {
             reviews.allReviewsLoaded = true;
         }
-    } catch(error){
-        alert('error server');
     } finally {
         reviews.isLoading = false;
     }
@@ -129,7 +127,7 @@ onMounted(async()=>{
         <div v-if="load" class="flex justify-center items-center h-[calc(100%-17px)]">
             <Load text="load"></Load>
         </div>
-        <div v-if="errorProduct">
+        <div v-if="errorProduct && !load">
             <div class="text-center text-xl">{{ useTranslateStore().t('productNotFound') }}</div>
             <div class="flex w-full justify-center items-center mt-2.5">
                 <Link :href="route('index')">

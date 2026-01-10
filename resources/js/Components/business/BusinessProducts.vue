@@ -18,7 +18,6 @@ import Card from '@/Components/product/Card.vue';
                     <Link :href="route('product.edit', product.id)">
                         <img class="cursor-pointer rounded-[5px] hover:shadow-[0_0px_15px_0_rgba(41,128,185,1)] transition duration-150" src="/public/img/edit.svg" alt="edit">
                     </Link>
-                    <img class="cursor-pointer rounded-[5px] hover:shadow-[0_0px_15px_0_rgba(91,33,182,1)] transition duration-150" src="/public/img/statistics.svg" alt="statistic">
                 </div>
             </Card>
         </div>

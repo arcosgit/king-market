@@ -7,6 +7,8 @@ import { ref, watch } from "vue";
 import { route } from "ziggy-js";
 
 const language = ref(useTranslateStore().currentLang);
+const showCatalog = ref(false);
+const emit = defineEmits(['showCatalog']);
 const showAuthModalFlag = ref(false);
 watch(language, async (newLang, OldLang) =>{
     useTranslateStore().currentLang = newLang;
@@ -21,7 +23,7 @@ watch(language, async (newLang, OldLang) =>{
                 <img class="block h-10" src="/public/img/logo.svg" alt="logo">
             </Link>
             <div class="flex gap-2.5 grow">
-                <button class="btn-dark-gray h-10 w-20">{{ useTranslateStore().t('catalog') }}</button>
+                <button @click.prevent="$emit('showCatalog', true), showCatalog = !showCatalog" class="btn-dark-gray h-10 w-20">{{ !showCatalog ? useTranslateStore().t('catalog') : 'X' }}</button>
                 <input type="text" class="p-2.25 h-10 grow border-2 border-lime-500 rounded-[10px] focus:outline-none" :placeholder="useTranslateStore().t('enterNameProductOrArticle')">
                 <button class="btn-green h-10 w-20">{{ useTranslateStore().t('find') }}</button>
             </div>

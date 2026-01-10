@@ -9,6 +9,7 @@ export const useUserStore = defineStore('user', {
         name: null,
         email: null,
         roleId: null,
+        profile: 'user',
         isLoginAttempt: false,
     }),
     actions: {
@@ -24,6 +25,7 @@ export const useUserStore = defineStore('user', {
             this.name = null;
             this.email = null;
             this.roleId = null;
+            this.profile = 'user';
             useUserBalanceStore().balance = 0;
             useBasketStore().resetData();
             useBusinessStore().resetData();

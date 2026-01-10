@@ -69,9 +69,5 @@ const changeNameBrand = async () => {
             <div class="w-32.5 h-32.5 rounded-full border-2 border-lime-500 flex justify-center items-center">{{ useBusinessStore().reviews }}</div>
             <div>{{ useTranslateStore().t('reviews') }}</div>
         </div>
-        <div class="flex items-center flex-col gap-y-1.25">
-            <div class="w-32.5 h-32.5 rounded-full border-2 border-lime-500 flex justify-center items-center">{{ useBusinessStore().profit }}</div>
-            <div>{{ useTranslateStore().t('profit') }}</div>
-        </div>
     </div>
 </template>

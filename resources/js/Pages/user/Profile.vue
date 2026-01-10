@@ -5,11 +5,13 @@ import {useUserStore} from "@/storage/user/user.js";
 import { Head } from '@inertiajs/vue3';
 import UserProfile from '@/Components/user/profile/UserProfile.vue';
 import NoAuth from '@/Components/user/helpers/NoAuth.vue';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import BusinessProfile from '@/Components/user/profile/BusinessProfile.vue';
-import AdminProfile from '@/Components/user/profile/AdminProfile.vue'
+import AdminProfile from '@/Components/user/profile/AdminProfile.vue';
 
-const profile = ref('user');
+const profile = ref(useUserStore().profile);
+
+watch(profile, ()=>{useUserStore().profile = profile.value;});
 
 </script>
 <template>

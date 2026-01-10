@@ -40,7 +40,7 @@ const setCategories = () => {
     if(indexCategory == -1) return;
     categories.choiceCategoryIndex = indexCategory;
     const indexSubcategory = categories.all[indexCategory].subcategories.findIndex(s => s.subcategory_id === useEditProductStore().categoryConst.subcategoryId);
-    if(indexCategory == -1) return;
+    if(indexSubcategory == -1) return;
     setTimeout(()=>{
         categories.choiceSubcategoryIndex = indexSubcategory;
     },100);

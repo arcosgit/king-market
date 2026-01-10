@@ -52,6 +52,7 @@ const saveImg = async (event) => {
                     </svg>
                 </div>
             </div>
+            <div v-if="img.hide" class="text-gray text-center">{{ useTranslateStore().t('hideImg') }}</div>
         </div>
     </div>
     <div v-else class="mt-5 text-xl text-center text-orange-300">{{ useTranslateStore().t('noImg') }}</div>

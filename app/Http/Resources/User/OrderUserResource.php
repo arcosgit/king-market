@@ -18,8 +18,8 @@ class OrderUserResource extends JsonResource
     public function toArray(Request $request): array
     {
         $products = $this->products->map(function ($orderProduct) {
-            $product = $orderProduct->product;
-            $product->quantity = $orderProduct->quantity;
+            $product = $orderProduct->product ?? null;
+            if($product != null) {$product->quantity = $orderProduct->quantity;};
             return $product;
         });
         return [
