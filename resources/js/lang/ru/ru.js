@@ -143,4 +143,13 @@ export default {
     'deleteProduct': 'Товар успешно удалён',
     'returnProductsBtn': 'Вернётся к товарам',
     'productNoExists': 'Товара больше не существует',
+    'productNotFoundSearch': 'Товар не найден',
+    'price': 'Цена',
+    'apply': 'Применить',
+    'filters': 'Фильтры',
+    'priceFrom': 'От',
+    'priceTo': 'До',
+    'ratingDoNotMatter': 'Не важен',
+    'priceFromError': 'Минимальная цена не может быть больше максимальной.',
+    'noProductsFoundFilter': 'Товары с заданными фильтрами не найдены.',
 }

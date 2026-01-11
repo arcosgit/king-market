@@ -142,4 +142,13 @@ export default {
     'deleteProduct': 'The item has been successfully removed',
     'returnProductsBtn': 'Return to products',
     'productNoExists': 'The product no longer exists',
+    'productNotFoundSearch': 'Product not found',
+    'price': 'Price',
+    'apply': 'Apply',
+    'filters': 'Filters',
+    'priceFrom': 'Form',
+    'priceTo': 'To',
+    'ratingDoNotMatter': "Doesn't matter",
+    'priceFromError': 'The minimum price cannot be greater than the maximum.',
+    'noProductsFoundFilter': 'No products matching the specified filters were found.',
 };

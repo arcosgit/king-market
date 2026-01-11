@@ -6,6 +6,8 @@ import { Link } from '@inertiajs/vue3';
 import { createPinia } from 'pinia';
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
 import {useTranslateStore} from "@/storage/lang/translate.js";
+import {useFindProductStore} from "@/storage/product/find.js";
+import {useCatalogStore} from "@/storage/catalog/catalog.js";
 
 createInertiaApp({
   resolve: name => {
@@ -21,9 +23,8 @@ createInertiaApp({
       .use(plugin)
       .use(ZiggyVue)
       .use(pinia);
-    
     const translateStore = useTranslateStore();
-    let initialLang = 'ru'; // значение по умолчанию
+    let initialLang = 'ru';
     try {
         const stored = localStorage.getItem('translate');
         if(stored) {
@@ -52,6 +53,11 @@ createInertiaApp({
         }
     });
     app.mount(el);
+    const inertia = app.config.globalProperties.$inertia;
+    inertia.on('navigate', (event) => {
+        useFindProductStore().products = [];
+        useCatalogStore().show = false;
+    });
   },
 
 });

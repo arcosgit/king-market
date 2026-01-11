@@ -3,13 +3,48 @@ import Auth from "@/Components/user/modals/Auth.vue";
 import {useTranslateStore} from "@/storage/lang/translate.js";
 import {useUserStore} from "@/storage/user/user.js";
 import {useBasketStore} from "@/storage/basket/basket.js";
-import { ref, watch } from "vue";
+import {useFindProductStore} from "@/storage/product/find.js";
+import {useCatalogStore} from "@/storage/catalog/catalog.js";
+import { reactive, ref, watch } from "vue";
+import { router } from '@inertiajs/vue3';
 import { route } from "ziggy-js";
+import axios from "axios";
 
+
+const find = reactive({name: '', isLoading: false});
+const productNotFound = ref(null);
 const language = ref(useTranslateStore().currentLang);
-const showCatalog = ref(false);
-const emit = defineEmits(['showCatalog']);
 const showAuthModalFlag = ref(false);
+
+const findProduct = async () => {
+    productNotFound.value = null;
+    if(find.name.trim() == ''){
+        useFindProductStore().products = [];
+        return;
+    };
+    find.isLoading = true;
+    try{
+        const res = await axios.post(route('product.find'), {name: find.name, business_id: null});
+        console.log(res);
+        if(!Array.isArray(res.data) && res.data.not_found){
+            productNotFound.value = true;
+            return;
+        }
+        if(!Array.isArray(res.data) && !res.data.not_found){
+            useFindProductStore().products = [];
+            router.visit(route('product.show', res.data.id));
+        }
+        if(Array.isArray(res.data) && !res.data.not_found){
+            useFindProductStore().name = find.name;
+            useFindProductStore().products = res.data;
+        }
+    } catch(error){
+        alert('error server');
+    } finally {
+        find.isLoading = false;
+    }
+}
+
 watch(language, async (newLang, OldLang) =>{
     useTranslateStore().currentLang = newLang;
     window.axios.defaults.headers.common['X-Lang'] = newLang;
@@ -22,10 +57,16 @@ watch(language, async (newLang, OldLang) =>{
             <Link :href="route('index')">
                 <img class="block h-10" src="/public/img/logo.svg" alt="logo">
             </Link>
-            <div class="flex gap-2.5 grow">
-                <button @click.prevent="$emit('showCatalog', true), showCatalog = !showCatalog" class="btn-dark-gray h-10 w-20">{{ !showCatalog ? useTranslateStore().t('catalog') : 'X' }}</button>
-                <input type="text" class="p-2.25 h-10 grow border-2 border-lime-500 rounded-[10px] focus:outline-none" :placeholder="useTranslateStore().t('enterNameProductOrArticle')">
-                <button class="btn-green h-10 w-20">{{ useTranslateStore().t('find') }}</button>
+            <div class="flex items-center gap-2.5 grow">
+                <button @click.prevent="useCatalogStore().show = !useCatalogStore().show" class="btn-dark-gray h-10 w-20">{{ !useCatalogStore().show ? useTranslateStore().t('catalog') : 'X' }}</button>
+                <div class="grow relative">
+                    <input @keyup.enter.prevent="findProduct" v-model="find.name" type="text" class="p-2.25 h-10 w-full border-2 border-lime-500 rounded-[10px] focus:outline-none" :placeholder="useTranslateStore().t('enterNameProductOrArticle')">
+                    <div v-if="productNotFound" class="text-red-500 text-sm absolute">{{ useTranslateStore().t('productNotFoundSearch') }}</div>
+                </div>
+                <button v-if="!find.isLoading" @click.prevent="findProduct" class="btn-green h-10 w-20">{{ useTranslateStore().t('find') }}</button>
+                <div v-else class="flex justify-center items-center w-20 h-10">
+                    <div class="w-7.5 h-7.5 border-3 text-blue-400 text-4xl animate-spin border-gray-300 flex items-center justify-center border-t-blue-400 rounded-full"></div>
+                </div>
             </div>
             <select v-model="language" class="bg-white text-black rounded-[10px] focus:outline-none h-10 w-11 cursor-pointer">
                 <option value="ru">RU</option>
