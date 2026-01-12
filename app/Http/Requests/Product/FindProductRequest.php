@@ -23,7 +23,8 @@ class FindProductRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'business_id' => ['nullable', 'integer', 'exists:business,id']
+            'business_id' => ['nullable', 'integer', 'exists:business,id'],
+            'cursor' => ['nullable', 'string'],
         ];
     }
 }

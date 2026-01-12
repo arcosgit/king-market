@@ -46,13 +46,13 @@ onBeforeMount(async () => {
             <Header></Header>
         </div>
         <main :class="{'px-2.5': !useCatalogStore().show}" class="grow shadow-[0_0px_15px_0_rgba(255,255,255,0.4)] py-5 rounded-t-[20px] mt-32.5">
-            <div v-if="!useCatalogStore().show && useFindProductStore().products.length <= 0">
+            <div v-if="!useCatalogStore().show && !useFindProductStore().show">
                 <slot></slot>
             </div>
             <div v-if="useCatalogStore().show">
                 <Catalog></Catalog>
             </div>
-            <div v-if="useFindProductStore().products.length > 0 && !useCatalogStore().show">
+            <div v-if="useFindProductStore().show && !useCatalogStore().show">
                 <FindProduct></FindProduct>
             </div>
         </main>

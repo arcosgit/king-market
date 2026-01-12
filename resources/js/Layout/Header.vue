@@ -5,38 +5,47 @@ import {useUserStore} from "@/storage/user/user.js";
 import {useBasketStore} from "@/storage/basket/basket.js";
 import {useFindProductStore} from "@/storage/product/find.js";
 import {useCatalogStore} from "@/storage/catalog/catalog.js";
-import { reactive, ref, watch } from "vue";
+import { onMounted, onUnmounted, reactive, ref, watch } from "vue";
 import { router } from '@inertiajs/vue3';
 import { route } from "ziggy-js";
 import axios from "axios";
 
 
-const find = reactive({name: '', isLoading: false});
+const find = reactive({name: '', nextCursor: null, allProductsLoaded: false, isLoading: false});
 const productNotFound = ref(null);
 const language = ref(useTranslateStore().currentLang);
 const showAuthModalFlag = ref(false);
 
 const findProduct = async () => {
     productNotFound.value = null;
-    if(find.name.trim() == ''){
-        useFindProductStore().products = [];
-        return;
-    };
+    if(find.name.trim() == '') return;
+    if(find.name != useFindProductStore().name){
+        useFindProductStore().resetData();
+        find.nextCursor = null;
+        find.allProductsLoaded = false;
+    }
+    if(find.isLoading || find.allProductsLoaded) return;
     find.isLoading = true;
     try{
-        const res = await axios.post(route('product.find'), {name: find.name, business_id: null});
+        useFindProductStore().show = true;
+        const res = await axios.post(route('product.find'), {name: find.name, business_id: null, cursor: find.nextCursor});
         console.log(res);
-        if(!Array.isArray(res.data) && res.data.not_found){
+        if(!Array.isArray(res.data.data) && res.data.not_found){
             productNotFound.value = true;
             return;
         }
-        if(!Array.isArray(res.data) && !res.data.not_found){
+        if(!Array.isArray(res.data.data) && !res.data.not_found){
             useFindProductStore().products = [];
             router.visit(route('product.show', res.data.id));
+            return;
         }
-        if(Array.isArray(res.data) && !res.data.not_found){
+        if(Array.isArray(res.data.data) && !res.data.not_found){
             useFindProductStore().name = find.name;
-            useFindProductStore().products = res.data;
+            useFindProductStore().products.push(...res.data.data);
+        }
+        find.nextCursor = res.data.next_cursor;
+        if(!res.data.has_more || !res.data.next_cursor) {
+            find.allProductsLoaded = true;
         }
     } catch(error){
         alert('error server');
@@ -45,10 +54,34 @@ const findProduct = async () => {
     }
 }
 
+const handleScroll = () => {
+    if(!useFindProductStore().filtersEnabled){
+        const scrollTop = window.scrollY;
+        const scrollHeight = document.documentElement.scrollHeight;
+        const clientHeight = window.innerHeight;
+        if(scrollTop + clientHeight >= scrollHeight){
+            findProduct();
+        }
+    }
+}
+
 watch(language, async (newLang, OldLang) =>{
     useTranslateStore().currentLang = newLang;
     window.axios.defaults.headers.common['X-Lang'] = newLang;
 });
+
+watch(()=>useFindProductStore().filtersEnabled, (newValue, oldValue)=>{
+    if(!newValue && oldValue){
+        find.nextCursor = null;
+        find.allProductsLoaded = false;
+        useFindProductStore().products = [];
+        findProduct();
+    }
+})
+
+onMounted(() => {window.addEventListener('scroll', handleScroll);});
+
+onUnmounted(() => {window.removeEventListener('scroll', handleScroll);});
 </script>
 <template>
     <Auth :show="showAuthModalFlag" @close="showAuthModalFlag = false"></Auth>

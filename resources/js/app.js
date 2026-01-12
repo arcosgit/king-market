@@ -55,8 +55,7 @@ createInertiaApp({
     app.mount(el);
     const inertia = app.config.globalProperties.$inertia;
     inertia.on('navigate', (event) => {
-        useFindProductStore().products = [];
-        useCatalogStore().show = false;
+        useFindProductStore().fullResetData();
     });
   },
 

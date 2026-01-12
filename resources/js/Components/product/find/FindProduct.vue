@@ -3,36 +3,80 @@ import Card from '@/Components/product/Card.vue';
 import {useTranslateStore} from "@/storage/lang/translate.js";
 import {useFindProductStore} from "@/storage/product/find.js";
 import axios from 'axios';
-import { reactive, ref } from 'vue';
+import { onMounted, onUnmounted, reactive, ref, watch } from 'vue';
 import { route } from 'ziggy-js';
 
-const filters = reactive({priceFrom: null, priceTo: null, rating: null});
+const filters = reactive({priceFrom: '', priceTo: '', rating: null});
+const filtersPagination = reactive({nextCursor: null, allProductsLoaded: false, isLoading: false, filtersEdited: false});
 const errors = reactive({priceFrom: false, notFound: false});
-const filtersLoad = ref(false);
 
 const setFilters = async () => {
     errors.priceFrom = false;
     errors.notFound = false;
-    if(filters.priceFrom == null && filters.priceTo == null && filters.rating == null) return;
-    if(filters.priceTo != null && filters.priceFrom > filters.priceTo){
+    if(filters.priceTo != '' && filters.priceFrom != '' && filters.priceFrom > filters.priceTo){
         errors.priceFrom = true;
         return;
     }
+    if(filtersPagination.isLoading || filtersPagination.allProductsLoaded) return;
+    filtersPagination.isLoading = true;
     try{
-        const res = await axios.post(route('product.find.filter'), {name: useFindProductStore().name, price_from: filters.priceFrom, price_to: filters.priceTo, rating: filters.rating});
+        useFindProductStore().filtersEnabled = true;
+        const res = await axios.post(route('product.find.filter'), {name: useFindProductStore().name, price_from: filters.priceFrom,
+            price_to: filters.priceTo, rating: filters.rating, cursor: filtersPagination.nextCursor});
         console.log(res);
-        if(!Array.isArray(res.data) && res.data.not_found){
+        if(!Array.isArray(res.data.data) && res.data.not_found){
             errors.notFound = true;
             return;
         } else {
-            useFindProductStore().products = res.data;
+            if(filtersPagination.filtersEdited) useFindProductStore().products = [];
+            filtersPagination.filtersEdited = false;
+            useFindProductStore().products.push(...res.data.data);
+        }
+        filtersPagination.nextCursor = res.data.next_cursor;
+        if(!res.data.has_more || !res.data.next_cursor) {
+            filtersPagination.allProductsLoaded = true;
         }
     } catch(e){
         alert('error server');
     } finally {
-        filtersLoad.value = false;
+        filtersPagination.isLoading = false;
     }
 }
+watch(filters, ()=>{
+    filtersPagination.allProductsLoaded = false;
+    filtersPagination.nextCursor = null;
+    filtersPagination.filtersEdited = true;
+});
+
+watch(()=>useFindProductStore().name, ()=>{
+    resetFilters();
+});
+
+const resetFilters = async () => {
+    filters.priceFrom = '';
+    filters.priceTo = '';
+    filters.rating = null;
+}
+
+const returnOldProducts = () =>{
+    resetFilters();
+    useFindProductStore().filtersEnabled = false;
+}
+
+const handleScroll = () => {
+    if(useFindProductStore().filtersEnabled){
+        const scrollTop = window.scrollY;
+        const scrollHeight = document.documentElement.scrollHeight;
+        const clientHeight = window.innerHeight;
+        if(scrollTop + clientHeight >= scrollHeight){
+            setFilters();
+        }
+    }
+}
+
+onMounted(() => {window.addEventListener('scroll', handleScroll);});
+
+onUnmounted(() => {window.removeEventListener('scroll', handleScroll);});
 </script>
 <template>
     <div class="text-xl text-center">{{ useTranslateStore().t('filters') }}</div>
@@ -54,7 +98,8 @@ const setFilters = async () => {
             </select>
         </div>
         <button @click.prevent="setFilters" class="btn-blue h-10">{{ useTranslateStore().t('apply') }}</button>
-        <button @click.prevent="useFindProductStore().products = []" class="btn-purple h-10">{{ useTranslateStore().t('close') }}</button>
+        <button @click.prevent="returnOldProducts" class="flex justify-center items-center border border-amber-500 bg-amber-500 p-2.5 cursor-pointer rounded-[10px] h-10 hover:bg-inherit hover:text-amber-500 transition duration-300">Сбросить</button>
+        <button @click.prevent="useFindProductStore().fullResetData()" class="btn-purple h-10">{{ useTranslateStore().t('close') }}</button>
     </div>
     <div class="relative">
         <div v-if="errors.priceFrom" class="text-red-500 absolute -bottom-5.5">{{ useTranslateStore().t('priceFromError') }}</div>

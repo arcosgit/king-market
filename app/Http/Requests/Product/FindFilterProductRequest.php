@@ -26,6 +26,7 @@ class FindFilterProductRequest extends FormRequest
             'price_from' => ['nullable', 'integer'],
             'price_to' => ['nullable', 'integer'],
             'rating' => ['nullable', 'min:1', 'max:5'],
+            'cursor' => ['nullable', 'string'],
         ];
     }
 

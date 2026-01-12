@@ -191,14 +191,24 @@ class ProductController extends Controller
     {
         $data = $request->validated();
         if($data['business_id'] != null){
-            return $data;
+            if(ctype_digit($data['name'])){
+                $product = ProductModel::where('business_id', $data['business_id'])->where('id', $data['name'])->with('image', 'reviews', 'favorite')->first();
+                return $product != null ? ProductCardResource::make($product)->resolve() : response()->json(['not_found' => true]);
+            } else {
+                $products = ProductModel::where('business_id', $data['business_id'])->whereLike('name', '%' . $data['name'] . '%')->with('image', 'reviews', 'favorite')->cursorPaginate(30, ['*'], 'cursor', $data['cursor']);
+                return count($products) != 0 ?
+                response()->json(['data' => ProductCardResource::collection($products)->resolve(), 'next_cursor' => $products->nextCursor()?->encode(), 'has_more' => $products->hasMorePages()]) :
+                response()->json(['not_found' => true]);
+            }
         } else {
             if(ctype_digit($data['name'])){
                 $product = ProductModel::where('id', $data['name'])->with('images', 'characteristics', 'business', 'reviews', 'favorite')->first();
                 return $product != null ? ProductShowResource::make($product)->resolve() : response()->json(['not_found' => true]);
             } else {
-                $products = ProductModel::whereLike('name', '%' . $data['name'] . '%')->with('image', 'reviews', 'favorite')->get();
-                return count($products) != 0 ? ProductCardResource::collection($products)->resolve() : response()->json(['not_found' => true]);
+                $products = ProductModel::whereLike('name', '%' . $data['name'] . '%')->with('image', 'reviews', 'favorite')->cursorPaginate(30, ['*'], 'cursor', $data['cursor']);
+                return count($products) != 0 ?
+                response()->json(['data' => ProductCardResource::collection($products)->resolve(), 'next_cursor' => $products->nextCursor()?->encode(), 'has_more' => $products->hasMorePages()]) :
+                response()->json(['not_found' => true]);
             }
         }
     }
@@ -208,20 +218,22 @@ class ProductController extends Controller
         $data = $request->validated();
         $products = ProductModel::whereLike('name', '%' . $data['name'] . '%')->with('image', 'reviews', 'favorite');
         if($data['price_from'] != null){
-            $products->where('price', '>=', $data['price_from']);
+            $products->where('price', '>=', $data['price_from'])->orderBy('price');
         }
         if($data['price_to'] != null){
-            $products->where('price', '<=', $data['price_to']);
+            $products->where('price', '<=', $data['price_to'])->orderBy('price');
         }
         $rating = $data['rating'];
         if($rating != null){
             $products->whereHas('reviews', function($query) use ($rating){
-                $query->select('product_id') // ← только это нужно!
+                $query->select('product_id')
                     ->groupBy('product_id')
                     ->havingRaw('ROUND(AVG(rating)) = ?', [$rating]);
             });
         }
-        $products = $products->get();
-        return count($products) != 0 ? ProductCardResource::collection($products)->resolve() : response()->json(['not_found' => true]);
+        $products = $products->cursorPaginate(30, ['*'], 'cursor', $data['cursor']);
+        return count($products) != 0 ?
+        response()->json(['data' => ProductCardResource::collection($products)->resolve(), 'next_cursor' => $products->nextCursor()?->encode(), 'has_more' => $products->hasMorePages()]) :
+        response()->json(['not_found' => true]);
     }
 }
