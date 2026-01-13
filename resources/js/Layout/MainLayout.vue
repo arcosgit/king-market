@@ -49,7 +49,7 @@ onBeforeMount(async () => {
             <div v-if="!useCatalogStore().show && !useFindProductStore().show">
                 <slot></slot>
             </div>
-            <div v-if="useCatalogStore().show">
+            <div v-show="useCatalogStore().show">
                 <Catalog></Catalog>
             </div>
             <div v-if="useFindProductStore().show && !useCatalogStore().show">

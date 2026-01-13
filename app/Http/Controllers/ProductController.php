@@ -8,6 +8,7 @@ use App\Application\Product\DTOs\StoreProductData;
 use App\Application\Product\UseCases\BuyProductUseCase;
 use App\Application\Product\UseCases\EditProductUseCase;
 use App\Application\Product\UseCases\StoreProductUseCase;
+use App\Http\Requests\Catalog\CatalogRequest;
 use App\Http\Requests\Product\BuyProductRequest;
 use App\Http\Requests\Product\CreateReviewProductRequest;
 use App\Http\Requests\Product\DeleteTemporaryImgRequest;
@@ -235,5 +236,29 @@ class ProductController extends Controller
         return count($products) != 0 ?
         response()->json(['data' => ProductCardResource::collection($products)->resolve(), 'next_cursor' => $products->nextCursor()?->encode(), 'has_more' => $products->hasMorePages()]) :
         response()->json(['not_found' => true]);
+    }
+
+    public function catalog(CatalogRequest $request)
+    {
+        $data = $request->validated();
+        $category_id = $data['category_id'] ?? $data['subcategory_id'] ?? $data['nested_subcategory_id'] ?? null;
+        $category_column = $data['category_id'] != null ? 'category_id' : ($data['subcategory_id'] != null ? 'subcategory_id' : 'nested_subcategory_id');
+        if($category_id != null){
+            $products = ProductModel::whereHas('categories', function($query) use ($category_id, $category_column){
+                $query->where($category_column, $category_id);
+            })->join('product_categories', 'products.id', '=', 'product_categories.product_id')->when($category_column === 'category_id', function ($query) {
+                $query->orderByRaw('(product_categories.subcategory_id IS NULL AND product_categories.nested_subcategory_id IS NULL) DESC');
+            })->when($category_column === 'subcategory_id', function ($query) {
+                $query->orderByRaw('(product_categories.nested_subcategory_id IS NULL) DESC');
+            })->select('products.*')->get();
+            return ProductCardResource::collection($products)->resolve();
+        } else {
+            return response()->json(['empty_categories' => []]);
+        }
+    }
+
+    public function catalogShow()
+    {
+        return Inertia::render('product/Catalog');
     }
 }

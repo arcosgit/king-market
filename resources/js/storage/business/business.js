@@ -8,6 +8,7 @@ export const useBusinessStore = defineStore('business', {
         rating: 0,
         reviews: 0,
         products: [],
+        isSearchEnabled: false,
     }),
     actions: {
         resetData(){
@@ -18,6 +19,7 @@ export const useBusinessStore = defineStore('business', {
             this.rating = 0;
             this.reviews = 0;
             this.products = [];
+            this.isSearchEnabled = false;
         }
     }
 });

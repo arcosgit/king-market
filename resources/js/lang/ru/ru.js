@@ -152,4 +152,7 @@ export default {
     'ratingDoNotMatter': 'Не важен',
     'priceFromError': 'Минимальная цена не может быть больше максимальной.',
     'noProductsFoundFilter': 'Товары с заданными фильтрами не найдены.',
+    'categoryDoesntExist': "Данная категория большое не существует.",
+    'catalogDescription': 'Здесь можно увидеть товары относящиеся к определённым категориям.',
+    'categoryProductsNotFound': 'Товары связанные с этой категорией не найдены.',
 }

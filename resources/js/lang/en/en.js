@@ -151,4 +151,7 @@ export default {
     'ratingDoNotMatter': "Doesn't matter",
     'priceFromError': 'The minimum price cannot be greater than the maximum.',
     'noProductsFoundFilter': 'No products matching the specified filters were found.',
+    'categoryDoesntExist': "This category doesn't really exist.",
+    'catalogDescription': 'Here you can see products related to certain categories.',
+    'categoryProductsNotFound': 'No products related to this category were found.',
 };

@@ -3,5 +3,6 @@ export const useCatalogStore = defineStore('catalog', {
     state: () => ({
         categories: [],
         show: false,
+        products: [],
     }),
 });

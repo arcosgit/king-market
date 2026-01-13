@@ -53,11 +53,13 @@ const getProducts = async () => {
 }
 
 const handleScroll = () => {
-    const scrollTop = window.scrollY;
-    const scrollHeight = document.documentElement.scrollHeight;
-    const clientHeight = window.innerHeight;
-    if(scrollTop + clientHeight >= scrollHeight){
-        getProducts();
+    if(!useBusinessStore().isSearchEnabled){
+        const scrollTop = window.scrollY;
+        const scrollHeight = document.documentElement.scrollHeight;
+        const clientHeight = window.innerHeight;
+        if(scrollTop + clientHeight >= scrollHeight){
+            getProducts();
+        }
     }
 }
 
