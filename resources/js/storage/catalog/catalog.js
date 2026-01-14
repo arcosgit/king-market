@@ -4,5 +4,15 @@ export const useCatalogStore = defineStore('catalog', {
         categories: [],
         show: false,
         products: [],
+        catagoryId: null,
+        subcategoryId: null,
+        nestedSubcategoryId: null,
     }),
+    actions: {
+        resetCategory(){
+            this.catagoryId = null;
+            this.subcategoryId = null;
+            this.nestedSubcategoryId = null;
+        }
+    }
 });

@@ -244,13 +244,14 @@ class ProductController extends Controller
         $category_id = $data['category_id'] ?? $data['subcategory_id'] ?? $data['nested_subcategory_id'] ?? null;
         $category_column = $data['category_id'] != null ? 'category_id' : ($data['subcategory_id'] != null ? 'subcategory_id' : 'nested_subcategory_id');
         if($category_id != null){
-            $products = ProductModel::whereHas('categories', function($query) use ($category_id, $category_column){
+            $products = ProductModel::with('image', 'reviews', 'favorite')->whereHas('categories', function($query) use ($category_id, $category_column){
                 $query->where($category_column, $category_id);
-            })->join('product_categories', 'products.id', '=', 'product_categories.product_id')->when($category_column === 'category_id', function ($query) {
+            })->join('product_categories', 'products.id', '=', 'product_categories.product_id')
+            ->when($category_column === 'category_id', function ($query) {
                 $query->orderByRaw('(product_categories.subcategory_id IS NULL AND product_categories.nested_subcategory_id IS NULL) DESC');
             })->when($category_column === 'subcategory_id', function ($query) {
                 $query->orderByRaw('(product_categories.nested_subcategory_id IS NULL) DESC');
-            })->select('products.*')->get();
+            })->select('products.*')->paginate(1);
             return ProductCardResource::collection($products)->resolve();
         } else {
             return response()->json(['empty_categories' => []]);

@@ -16,10 +16,15 @@ const getCategories = async () => {
 
 const getProductsByCategory = async (categoryId = null, subcategoryId = null, nestedSubcategoryId = null) => {
     try{
-        const res = await axios.post(route('product.catalog'), {category_id: categoryId, subcategory_id: subcategoryId, nested_subcategory_id: nestedSubcategoryId});
+        const res = await axios.post(route('product.catalog') + '?page=1', {category_id: categoryId, subcategory_id: subcategoryId, nested_subcategory_id: nestedSubcategoryId});
+        console.log(res);
         if(res.data.length != 0){
             useCatalogStore().products = res.data;
-            router.visit(route('catalog.show'));
+            useCatalogStore().catagoryId = categoryId;
+            useCatalogStore().subcategoryId = subcategoryId;
+            useCatalogStore().nestedSubcategoryId = nestedSubcategoryId;
+            useCatalogStore().show = false;
+            if(window.location.href != route('catalog.show')) router.visit(route('catalog.show'));
         } else {
             alert(useTranslateStore().t('categoryProductsNotFound'));
         }
