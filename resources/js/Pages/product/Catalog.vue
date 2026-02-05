@@ -5,43 +5,91 @@ import {useTranslateStore} from "@/storage/lang/translate.js";
 import {useCatalogStore} from "@/storage/catalog/catalog.js";
 import { Head } from '@inertiajs/vue3';
 import { router } from '@inertiajs/vue3';
-import { onBeforeMount, onMounted, onUnmounted, reactive, ref } from 'vue';
+import { onBeforeMount, onMounted, onUnmounted, reactive, watch } from 'vue';
 import { route } from 'ziggy-js';
 import axios from 'axios';
 
-const filters = reactive({priceFrom: '', priceTo: '', rating: null});
+const filters = reactive({priceFrom: '', priceTo: '', rating: null, enabled: false});
 const errors = reactive({priceFrom: false, notFound: false});
-const pagination = reactive({number: 1, allProductsLoaded: false});
+const pagination = reactive({number: 1, allProductsLoaded: false, numberFilter: 1});
 
 const getProducts = async () => {
     errors.notFound;
     errors.priceFrom;
-    // if(filters.priceTo != '' && filters.priceFrom != '' && filters.priceFrom > filters.priceTo){
-    //     errors.priceFrom = true;
-    //     return;
-    // }
     if(pagination.allProductsLoaded) return;
     try{
         const res = await axios.post(route('product.catalog') + `?page=${pagination.number}`, {category_id: useCatalogStore().catagoryId, subcategory_id: useCatalogStore().subcategoryId,nested_subcategory_id: useCatalogStore().nestedSubcategoryId });
         useCatalogStore().products.push(...res.data);
         if(res.data.length <= 0) pagination.allProductsLoaded = true;
     } catch (e){
-        console.log(e);
-        // alert('server error');
+        alert('server error');
     }
 
+}
+
+const resetFilters = () => {
+    filters.priceFrom = '';
+    filters.priceTo = '';
+    filters.rating = null;
+    filters.enabled = false;
+    pagination.allProductsLoaded = false;
+    pagination.number = 1;
+    pagination.numberFilter = 1;
+    useCatalogStore().products = [];
+    getProducts();
+}
+
+const setFilters = async () => {
+    errors.notFound = false;
+    errors.priceFrom = false;
+    if(filters.priceTo != '' && filters.priceFrom != '' && filters.priceFrom > filters.priceTo){
+        errors.priceFrom = true;
+        return;
+    }
+    if(pagination.allProductsLoaded) return;
+    try{
+        const res = await axios.post(route('product.catalog.filter') + `?page=${pagination.numberFilter}`, {
+            category_id: useCatalogStore().catagoryId,
+            subcategory_id: useCatalogStore().subcategoryId,
+            nested_subcategory_id: useCatalogStore().nestedSubcategoryId,
+            price_from: filters.priceFrom,
+            price_to: filters.priceTo,
+            rating: filters.rating
+        });
+        if(!Array.isArray(res.data.data) && res.data.not_found){
+            errors.notFound = true;
+            return;
+        } else {
+            if(!filters.enabled) useCatalogStore().products = [];
+            if(!res.data.has_more_page) pagination.allProductsLoaded = true;
+            useCatalogStore().products.push(...res.data.data);
+        }
+        filters.enabled = true;
+    } catch(e){
+        alert('server error');
+    }
 }
 
 const handleScroll = () => {
     const scrollTop = window.scrollY;
     const scrollHeight = document.documentElement.scrollHeight;
     const clientHeight = window.innerHeight;
-    if(scrollTop + clientHeight >= scrollHeight){
+    if(scrollTop + clientHeight >= scrollHeight && !filters.enabled){
         pagination.number += 1;
         getProducts();
+        return;
     }
-
+    if(scrollTop + clientHeight >= scrollHeight && filters.enabled){
+        pagination.numberFilter += 1;
+        setFilters();
+    }
 }
+
+watch(() => [filters.priceFrom, filters.priceTo, filters.rating], ()=>{
+    pagination.allProductsLoaded = false;
+    pagination.numberFilter = 1;
+    filters.enabled = false;
+});
 
 onBeforeMount(() => {
     if(useCatalogStore().products.length <= 0) router.visit(route('index'));
@@ -80,9 +128,9 @@ onUnmounted(()=>{
                         <option value="1">⭐</option>
                     </select>
                 </div>
-                <button class="btn-blue h-10">{{ useTranslateStore().t('apply') }}</button>
-                <button class="flex justify-center items-center border border-amber-500 bg-amber-500 p-2.5 cursor-pointer rounded-[10px] h-10 hover:bg-inherit hover:text-amber-500 transition duration-300">Сбросить</button>
-                <button class="btn-purple h-10">{{ useTranslateStore().t('home') }}</button>
+                <button @click.prevent="setFilters" class="btn-blue h-10">{{ useTranslateStore().t('apply') }}</button>
+                <button @click.prevent="resetFilters" class="flex justify-center items-center border border-amber-500 bg-amber-500 p-2.5 cursor-pointer rounded-[10px] h-10 hover:bg-inherit hover:text-amber-500 transition duration-300">{{ useTranslateStore().t('reset') }}</button>
+                <button @click.prevent="router.visit(route('index'))" class="btn-purple h-10">{{ useTranslateStore().t('home') }}</button>
             </div>
             <div class="relative">
                 <div v-if="errors.priceFrom" class="text-red-500 absolute -bottom-5.5">{{ useTranslateStore().t('priceFromError') }}</div>

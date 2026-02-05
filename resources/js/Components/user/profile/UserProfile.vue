@@ -114,11 +114,4 @@ const logout = async () => {
         <div class="font-bold text-[20px]">{{ useTranslateStore().t('balance') }}: <span class="text-violet-800">{{ useUserBalanceStore().balance }}</span></div>
         <img @click.prevent="btnsChange.balance = !btnsChange.balance" class="cursor-pointer rounded-[5px] hover:shadow-[0_0px_15px_0_rgba(138,201,121,1)] transition duration-150" src="/public/img/add.svg" alt="add">
     </div>
-    <div class="font-bold text-[20px] mt-2.5">{{ useTranslateStore().t('youLooked') }}</div>
-    <div class="flex justify-between flex-wrap mt-2.5">
-        <!-- <Card />
-        <Card />
-        <Card />
-        <Card /> -->
-    </div>
 </template>

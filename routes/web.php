@@ -10,5 +10,8 @@ Route::prefix('user')->group(function(){
 Route::prefix('product')->group(function(){
     require __DIR__.'/product/web.php';
 });
+Route::prefix('business')->group(function() {
+    require __DIR__.'/business/web.php';
+});
 
 

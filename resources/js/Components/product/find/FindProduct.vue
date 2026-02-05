@@ -3,7 +3,7 @@ import Card from '@/Components/product/Card.vue';
 import {useTranslateStore} from "@/storage/lang/translate.js";
 import {useFindProductStore} from "@/storage/product/find.js";
 import axios from 'axios';
-import { onMounted, onUnmounted, reactive, ref, watch } from 'vue';
+import { onMounted, onUnmounted, reactive, watch } from 'vue';
 import { route } from 'ziggy-js';
 
 const filters = reactive({priceFrom: '', priceTo: '', rating: null});
@@ -23,7 +23,6 @@ const setFilters = async () => {
         useFindProductStore().filtersEnabled = true;
         const res = await axios.post(route('product.find.filter'), {name: useFindProductStore().name, price_from: filters.priceFrom,
             price_to: filters.priceTo, rating: filters.rating, cursor: filtersPagination.nextCursor});
-        console.log(res);
         if(!Array.isArray(res.data.data) && res.data.not_found){
             errors.notFound = true;
             return;
@@ -98,7 +97,7 @@ onUnmounted(() => {window.removeEventListener('scroll', handleScroll);});
             </select>
         </div>
         <button @click.prevent="setFilters" class="btn-blue h-10">{{ useTranslateStore().t('apply') }}</button>
-        <button @click.prevent="returnOldProducts" class="flex justify-center items-center border border-amber-500 bg-amber-500 p-2.5 cursor-pointer rounded-[10px] h-10 hover:bg-inherit hover:text-amber-500 transition duration-300">Сбросить</button>
+        <button @click.prevent="returnOldProducts" class="flex justify-center items-center border border-amber-500 bg-amber-500 p-2.5 cursor-pointer rounded-[10px] h-10 hover:bg-inherit hover:text-amber-500 transition duration-300">{{ useTranslateStore().t('reset') }}</button>
         <button @click.prevent="useFindProductStore().fullResetData()" class="btn-purple h-10">{{ useTranslateStore().t('close') }}</button>
     </div>
     <div class="relative">

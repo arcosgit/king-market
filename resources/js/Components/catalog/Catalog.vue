@@ -17,7 +17,6 @@ const getCategories = async () => {
 const getProductsByCategory = async (categoryId = null, subcategoryId = null, nestedSubcategoryId = null) => {
     try{
         const res = await axios.post(route('product.catalog') + '?page=1', {category_id: categoryId, subcategory_id: subcategoryId, nested_subcategory_id: nestedSubcategoryId});
-        console.log(res);
         if(res.data.length != 0){
             useCatalogStore().products = res.data;
             useCatalogStore().catagoryId = categoryId;

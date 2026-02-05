@@ -8,6 +8,7 @@ use App\Http\Resources\Product\ProductCardResource;
 use App\Models\BusinessModel;
 use App\Models\ProductModel;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class BusinessController extends Controller
 {
@@ -40,6 +41,23 @@ class BusinessController extends Controller
         $business = BusinessModel::where('user_id', auth()->id())->first();
         $products = ProductModel::where('business_id', $business->id)->with('image', 'reviews', 'favorite')
         ->orderByDesc('created_at')->cursorPaginate(20);
+        return response()->json([
+            'data' => ProductCardResource::collection($products)->resolve(),
+            'next_cursor' => $products->nextCursor()?->encode(),
+            'has_more' => $products->hasMorePages(),
+        ]);
+    }
+
+    public function showProducts($name)
+    {
+        $business = BusinessModel::where('name', $name)->first();
+        return Inertia::render('business/ShowProducts', ['name' => $name, 'id' => $business->id]);
+    }
+
+    public function getProductsFromName($id)
+    {
+        $products = ProductModel::where('business_id', $id)->with('image', 'reviews', 'favorite')
+        ->orderByDesc('created_at')->cursorPaginate(30);
         return response()->json([
             'data' => ProductCardResource::collection($products)->resolve(),
             'next_cursor' => $products->nextCursor()?->encode(),

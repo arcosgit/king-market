@@ -27,9 +27,7 @@ const findProduct = async () => {
     if(find.isLoading || find.allProductsLoaded) return;
     find.isLoading = true;
     try{
-        useFindProductStore().show = true;
         const res = await axios.post(route('product.find'), {name: find.name, business_id: null, cursor: find.nextCursor});
-        console.log(res);
         if(!Array.isArray(res.data.data) && res.data.not_found){
             productNotFound.value = true;
             return;
@@ -40,6 +38,7 @@ const findProduct = async () => {
             return;
         }
         if(Array.isArray(res.data.data) && !res.data.not_found){
+            useFindProductStore().show = true;
             useFindProductStore().name = find.name;
             useFindProductStore().products.push(...res.data.data);
         }

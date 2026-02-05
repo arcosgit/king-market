@@ -98,9 +98,9 @@ onUnmounted(()=>{window.removeEventListener('scroll', handleScroll);});
                 </div>
                 <div :class="['px-2.5 overflow-hidden', order.show ? 'grid grid-rows-[1fr] transition-all duration-300' : 'grid grid-rows-[0fr] transition-all duration-300']">
                     <div class="overflow-hidden">
-                        <div class="flex flex-wrap gap-x-5 gap-y-2.5 items-center">
-                            <div v-for="(product, indexProduct) in order.products" :key="indexProduct">
-                                <div v-if="!product.no_product">
+                        <div class="grid gap-x-13.5 grid-cols-5 max-2xl:grid-cols-4 max-2xl:gap-x-18.5 max-xl:grid-cols-3 max-xl:gap-x-27.75 max-lg:grid-cols-2 max-lg:gap-x-57 max-md:grid-cols-1">
+                            <div v-for="(product, indexProduct) in order.products" :key="indexProduct" class="max-md:place-items-center">
+                                <div v-if="!product.no_product" class="mt-2.5">
                                     <Card :product="product">
                                         <div class="text-blue">{{ useTranslateStore().t('quantity') }}: {{ product.quantity }}</div>
                                         <button @click.prevent="openReviewModal(product, order.id)" class="btn-purple mt-1 h-7.5">{{ product.review_text == null ? useTranslateStore().t('leaveFeedback'): useTranslateStore().t('editReview') }}</button>

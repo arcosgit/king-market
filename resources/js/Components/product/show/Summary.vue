@@ -71,8 +71,10 @@ onMounted(() => {
             <img src="/public/img/comment.svg" alt="reviews">
             <div class="text-gray">{{ props.product.reviews_count }}</div>
         </div>
-        <div v-if="!props.preview" class="text-base mt-1">{{ useTranslateStore().t('seller') }}: <span class="text-violet-800">{{ props.product.brand_name}}</span></div>
-        <div v-else class="text-base mt-1">{{ useTranslateStore().t('seller') }}: <span class="text-violet-800">{{ useTranslateStore().t('yourBrand')}}</span></div>
+        <Link v-if="!props.preview" :href="route('business.products.show', props.product.brand_name)">
+            <div class="text-base mt-1">{{ useTranslateStore().t('seller') }}: <span class="text-violet-800">{{ props.product.brand_name }}</span></div>
+        </Link>
+        <div v-else class="text-base mt-1">{{ useTranslateStore().t('seller') }}: <span class="text-violet-800">{{ useTranslateStore().t('yourBrand') }}</span></div>
         <div class="text-xl text-lime-500">{{ props.product.price }} ₽</div>
         <div v-if="!props.preview" class="flex gap-x-2.5 items-center mt-1">
             <button v-if="!isProductCart" @click.prevent="useBasketStore().products.push({quantity: 1, product: props.product}), isProductCart = true" class="btn-blue w-full h-10">{{ useTranslateStore().t('addСart') }}</button>

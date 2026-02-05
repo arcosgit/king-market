@@ -36,7 +36,6 @@ const findProducts = async () => {
             useBusinessStore().isSearchEnabled = true;
             find.nameConst = find.name;
             find.products.push(...res.data.data);
-            console.log(res);
         }
         find.nextCursor = res.data.next_cursor;
         if(!res.data.has_more || !res.data.next_cursor) {

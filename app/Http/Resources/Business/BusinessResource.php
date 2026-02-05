@@ -17,10 +17,10 @@ class BusinessResource extends JsonResource
         return [
             'id' => $this->id ?? null,
             'name' => $this->name ?? null,
-            'products_quantity' => $this->products_count,
-            'sales' => $this->total_sold_quantity,
-            'average_rating' => $this->total_rating_reviews['average_rating'],
-            'quantity_reviews' => $this->total_rating_reviews['quantity_reviews']
+            'products_quantity' => $this->products_count ?? null,
+            'sales' => $this->total_sold_quantity ?? null,
+            'average_rating' => $this->total_rating_reviews['average_rating'] ?? null,
+            'quantity_reviews' => $this->total_rating_reviews['quantity_reviews'] ?? null
         ];
     }
 }

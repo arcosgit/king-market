@@ -155,4 +155,7 @@ export default {
     'categoryDoesntExist': "Данная категория большое не существует.",
     'catalogDescription': 'Здесь можно увидеть товары относящиеся к определённым категориям.',
     'categoryProductsNotFound': 'Товары связанные с этой категорией не найдены.',
+    'reset': 'Сбросить',
+    'productsFrom': 'Товары от',
+    'businessProductsDescription': 'Здесь можно увидеть товары от нужного вам продавца',
 }

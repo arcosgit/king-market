@@ -1,11 +1,7 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-// Route::get('/user', function (Request $request) {
-//     return $request->user();
-// })->middleware('auth:sanctum');
 Route::post('/categories', [App\Http\Controllers\HomeController::class, 'categories'])->name('categories');
 Route::prefix('user')->group(function(){
     require __DIR__.'/user/api.php';

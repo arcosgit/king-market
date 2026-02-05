@@ -154,4 +154,7 @@ export default {
     'categoryDoesntExist': "This category doesn't really exist.",
     'catalogDescription': 'Here you can see products related to certain categories.',
     'categoryProductsNotFound': 'No products related to this category were found.',
+    'reset': 'Reset',
+    'productsFrom': 'Products from',
+    'businessProductsDescription': 'Here you can see products from the seller you need',
 };
