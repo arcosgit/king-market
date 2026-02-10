@@ -158,4 +158,6 @@ export default {
     'reset': 'Сбросить',
     'productsFrom': 'Товары от',
     'businessProductsDescription': 'Здесь можно увидеть товары от нужного вам продавца',
+    'main': 'Главная',
+    'language': 'Язык',
 }

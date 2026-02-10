@@ -11,6 +11,7 @@ import Load from '@/Widgets/icons/Load.vue';
 import Basket from '@/Components/basket/Basket.vue';
 import Catalog from '@/Components/catalog/Catalog.vue';
 import FindProduct from '@/Components/product/find/FindProduct.vue';
+import Nav from './Nav.vue';
 
 const load = ref(true);
 
@@ -29,8 +30,8 @@ onBeforeMount(async () => {
             setTimeout(() => {
                 load.value = false;
             }, 1000);
-        } catch (error) {
-            alert('error server');
+        } catch  {
+            //
         }
     } else {
         load.value = false;
@@ -45,8 +46,8 @@ onBeforeMount(async () => {
         <div class="fixed container z-50 bg-dark">
             <Header></Header>
         </div>
-        <main :class="{'px-2.5': !useCatalogStore().show}" class="grow shadow-[0_0px_15px_0_rgba(255,255,255,0.4)] py-5 rounded-t-[20px] mt-32.5">
-            <div v-if="!useCatalogStore().show && !useFindProductStore().show">
+        <main :class="{'px-2.5': !useCatalogStore().show}" class="grow shadow-[0_0px_15px_0_rgba(255,255,255,0.4)] py-5 rounded-[20px] mt-32.5">
+            <div v-if="!useCatalogStore().show && !useFindProductStore().show" class="max-lg:mb-15">
                 <slot></slot>
             </div>
             <div v-show="useCatalogStore().show">
@@ -56,6 +57,13 @@ onBeforeMount(async () => {
                 <FindProduct></FindProduct>
             </div>
         </main>
+        <div class="fixed left-0 right-0 bottom-0 z-40 max-lg:block hidden">
+            <div class="container mx-auto">
+                <div class="bg-dark rounded-t-[20px] shadow-[0_0px_15px_0_rgba(255,255,255,0.4)] p-2.5">
+                    <Nav></Nav>
+                </div>
+            </div>
+        </div>
         <Basket></Basket>
     </div>
 </template>

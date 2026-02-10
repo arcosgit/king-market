@@ -46,9 +46,9 @@ onUnmounted(() => {
 });
 </script>
 <template>
-    <div class="flex gap-x-2.5 min-w-152.5 max-w-152.5">
-        <div class="flex flex-col gap-y-2.5 overflow-y-auto custom-scrollbar max-h-125">
-            <div v-for="(image, index) in props.images" :key="index">
+    <div class="flex gap-2.5 min-w-152.5 max-w-152.5 max-[660px]:flex-col max-[660px]:min-w-0 max-[660px]:w-full max-[660px]:max-w-full">
+        <div class="flex flex-col gap-2.5 overflow-auto custom-scrollbar max-[660px]:w-full max-h-125 max-[660px]:flex-row max-[660px]:overflow-y-hidden">
+            <div v-for="(image, index) in props.images" :key="index" class="max-[660px]:shrink-0">
                 <img @click.prevent="selectImage(index)" class="w-25 h-25 rounded-[10px] object-cover object-center hover:border-2 hover:border-[#2980B9] cursor-pointer" :src="image.img" alt="product image">
             </div>
         </div>

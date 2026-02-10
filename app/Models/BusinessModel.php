@@ -27,7 +27,7 @@ class BusinessModel extends Model
             $query->where('business_id', $this->id);
         });
         return [
-            'average_rating' => floor($reviews->sum('rating') / $reviews->count() * 10) / 10,
+            'average_rating' => $reviews->count() > 0 ? floor($reviews->sum('rating') / $reviews->count() * 10) / 10 : 0,
             'quantity_reviews' => $reviews->count(),
         ];
     }

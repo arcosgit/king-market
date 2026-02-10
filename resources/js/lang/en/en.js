@@ -157,4 +157,6 @@ export default {
     'reset': 'Reset',
     'productsFrom': 'Products from',
     'businessProductsDescription': 'Here you can see products from the seller you need',
+    'main': 'Home',
+    'language': 'Language',
 };

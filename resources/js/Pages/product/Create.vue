@@ -102,7 +102,7 @@ const showPreview = () => {
                 <div v-if="errors.img" class="mt-2.5 text-red-500">{{ errors.img }}</div>
                 <Categories></Categories>
                 <div v-if="errors.category" class="mt-2.5 text-red-500">{{ errors.category }}</div>
-                <div class="flex gap-x-2.5 mt-2.5">
+                <div class="flex flex-wrap gap-2.5 mt-2.5">
                     <div v-if="load.create" class="min-w-40 h-10 flex justify-center items-center">
                         <div class="w-7.5 h-7.5 border-3 text-blue-400 text-4xl animate-spin border-gray-300 flex items-center justify-center border-t-blue-400 rounded-full"></div>
                     </div>
@@ -117,9 +117,11 @@ const showPreview = () => {
             </div>
         </div>
         <div v-else>
-            <div class="flex justify-between gap-x-5 w-full items-start">
+            <div class="flex max-xl:flex-wrap justify-between gap-5 w-full items-start">
                 <ImagesPreview :images="useCreateProductStore().images"></ImagesPreview>
-                <Summary :product="useCreateProductStore()" :preview="true"></Summary>
+                <div class="max-lg:flex max-lg:justify-center max-lg:items-center max-lg:w-full">
+                    <Summary :product="useCreateProductStore()" :preview="true"></Summary>
+                </div>
                 <div class="w-full h-125 rounded-[20px] shadow-[0_0px_15px_0_rgba(255,255,255,0.4)] p-2.5">
                     <div class="text-base font-bold text-center">{{ useTranslateStore().t('relatedProducts') }}</div>
                 </div>

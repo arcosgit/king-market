@@ -9,6 +9,7 @@ import TopUpBalance from '@/Components/user/modals/TopUpBalance.vue'
 import axios from 'axios';
 import { route } from 'ziggy-js';
 import TopNotification from '@/Widgets/notification/TopNotification.vue';
+import Language from '../helpers/Language.vue';
 
 
 const btnsChange = reactive({name: false, email: false, password: false, balance: false});
@@ -88,7 +89,7 @@ const logout = async () => {
             <img @click.prevent="btnsChange.name = !btnsChange.name" class="cursor-pointer rounded-[5px] hover:shadow-[0_0px_15px_0_rgba(41,128,185,1)] transition duration-150" src="/public/img/edit.svg" alt="edit">
         </div>
         <div v-if="btnsChange.name" class="flex gap-x-2.5 items-center">
-            <input v-model="userData.name" :readonly="load" type="text" class="p-2.25 w-70 h-7.5 border-2 border-lime-500 rounded-[10px] focus:outline-none" :placeholder="useTranslateStore().t('enterLogin')">
+            <input v-model="userData.name" :readonly="load" type="text" class="p-2.25 w-70 h-7.5 border-2 border-lime-500 rounded-[10px] focus:outline-none max-[385px]:w-auto" :placeholder="useTranslateStore().t('enterLogin')">
             <div v-if="load" class="w-7.5 h-7.5 border-3 text-blue-400 text-4xl animate-spin border-gray-300 flex items-center justify-center border-t-blue-400 rounded-full"></div>
             <img v-if="!load" @click.prevent="changeName" class="cursor-pointer rounded-[5px] hover:shadow-[0_0px_15px_0_rgba(138,201,121,1)] transition duration-150" src="/public/img/confirm.svg" alt="confirm">
             <img v-if="!load" @click.prevent="btnsChange.name = !btnsChange.name, userData.name = useUserStore().name" class="cursor-pointer rounded-[5px] hover:shadow-[0_0px_15px_0_rgba(255,0,0,1)] transition duration-150" src="/public/img/cancel.svg" alt="cancel">
@@ -100,7 +101,7 @@ const logout = async () => {
             <img @click.prevent="btnsChange.email = !btnsChange.email" class="cursor-pointer rounded-[5px] hover:shadow-[0_0px_15px_0_rgba(41,128,185,1)] transition duration-150" src="/public/img/edit.svg" alt="edit">
         </div>
         <div v-if="btnsChange.email" class="flex gap-x-2.5 items-center">
-            <input v-model="userData.email" :readonly="load" type="text" class="p-2.25 w-70 h-7.5 border-2 border-lime-500 rounded-[10px] focus:outline-none" :placeholder="useTranslateStore().t('enterEmail')">
+            <input v-model="userData.email" :readonly="load" type="text" class="p-2.25 w-70 h-7.5 border-2 border-lime-500 rounded-[10px] focus:outline-none max-[385px]:w-auto" :placeholder="useTranslateStore().t('enterEmail')">
             <div v-if="load" class="w-7.5 h-7.5 border-3 text-blue-400 text-4xl animate-spin border-gray-300 flex items-center justify-center border-t-blue-400 rounded-full"></div>
             <img v-if="!load" @click.prevent="changeEmail" class="cursor-pointer rounded-[5px] hover:shadow-[0_0px_15px_0_rgba(138,201,121,1)] transition duration-150" src="/public/img/confirm.svg" alt="confirm">
             <img v-if="!load" @click.prevent="btnsChange.email = !btnsChange.email, userData.email = useUserStore().email" class="cursor-pointer rounded-[5px] hover:shadow-[0_0px_15px_0_rgba(255,0,0,1)] transition duration-150" src="/public/img/cancel.svg" alt="cancel">
@@ -113,5 +114,9 @@ const logout = async () => {
     <div class="flex items-center gap-x-2.5 mt-2.5">
         <div class="font-bold text-[20px]">{{ useTranslateStore().t('balance') }}: <span class="text-violet-800">{{ useUserBalanceStore().balance }}</span></div>
         <img @click.prevent="btnsChange.balance = !btnsChange.balance" class="cursor-pointer rounded-[5px] hover:shadow-[0_0px_15px_0_rgba(138,201,121,1)] transition duration-150" src="/public/img/add.svg" alt="add">
+    </div>
+    <div class="flex items-center gap-x-2.5 mt-2.5">
+        <div class="font-bold text-[20px]">{{ useTranslateStore().t('language') }}</div>
+        <Language></Language>
     </div>
 </template>

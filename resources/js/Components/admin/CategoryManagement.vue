@@ -137,10 +137,10 @@ const deleteCategory = async () => {
 <template>
     <div class="pb-3.75">
         <div class="flex items-center gap-x-2.5">
-            <input @keyup.enter.prevent="findCategory" v-model="category.findCreateName" :readonly="load.category" type="text" class="p-2.25 w-100 h-10 border-2 border-lime-500 rounded-[10px] focus:outline-none" :placeholder="useTranslateStore().t('enterCategory')">
-            <button @click.prevent="findCategory" v-if="!load.category" class="btn-blue w-20 h-10">{{ useTranslateStore().t('find') }}</button>
-            <button @click.prevent="createCategory" v-if="!load.category" class="btn-purple w-20 h-10">{{ useTranslateStore().t('create') }}</button>
-            <div v-if="load.category" class="w-7.5 h-7.5 border-3 text-blue-400 text-4xl animate-spin border-gray-300 flex items-center justify-center border-t-blue-400 rounded-full"></div>
+            <input @keyup.enter.prevent="findCategory" v-model="category.findCreateName" :readonly="load.category" type="text" class="p-2.25 w-100 h-10 border-2 border-lime-500 rounded-[10px] focus:outline-none max-[425px]:w-full" :placeholder="useTranslateStore().t('enterCategory')">
+            <button @click.prevent="findCategory" v-if="!load.category" class="btn-blue min-w-20 h-10">{{ useTranslateStore().t('find') }}</button>
+            <button @click.prevent="createCategory" v-if="!load.category" class="btn-purple min-w-20 h-10">{{ useTranslateStore().t('create') }}</button>
+            <div v-if="load.category" class="min-w-7.5 min-h-7.5 border-3 text-blue-400 text-4xl animate-spin border-gray-300 flex items-center justify-center border-t-blue-400 rounded-full"></div>
         </div>
         <div v-if="categoryErrors.create" class="mt-2.5 text-red-500" >{{ categoryErrors.create }}</div>
         <div v-if="categoryErrors.find" class="mt-2.5 text-red-500" >{{ categoryErrors.find }}</div>
