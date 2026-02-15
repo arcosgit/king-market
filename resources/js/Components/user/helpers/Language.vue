@@ -1,7 +1,7 @@
 <script setup>
 import {useTranslateStore} from "@/storage/lang/translate.js";
 import { watch } from 'vue';
-watch(useTranslateStore().currentLang, async (newLang, OldLang) =>{
+watch(()=>useTranslateStore().currentLang, async (newLang, OldLang) =>{
     useTranslateStore().currentLang = newLang;
     window.axios.defaults.headers.common['X-Lang'] = newLang;
 });

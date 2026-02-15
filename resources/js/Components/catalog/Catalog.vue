@@ -42,15 +42,15 @@ onMounted(async ()=>{
 });
 </script>
 <template>
-    <div class="flex gap-x-10 h-[calc(100vh-180px)] mt-2.5">
-        <div class="min-w-75 max-w-75 bg-dark shadow-[0_0px_15px_0_rgba(255,255,255,0.4)] rounded-r-[20px] p-2 overflow-y-auto custom-scrollbar">
+    <div class="flex gap-x-10 h-[calc(100vh-180px)] mt-2.5 max-[650px]:gap-x-5">
+        <div class="min-w-75 max-w-75 max-[650px]:min-w-37 bg-dark shadow-[0_0px_15px_0_rgba(255,255,255,0.4)] rounded-r-[20px] p-2 overflow-y-auto custom-scrollbar max-[]">
             <div class="flex flex-col">
                 <div v-for="(category, index) in useCatalogStore().categories" :key="index">
-                    <button @dblclick.prevent="getProductsByCategory(choiceCategory.category_id)" @click.prevent="openCategory(index)" :class="{'text-blue bg-blue-500/8': choiceCategory != null && category.category_id == choiceCategory.category_id}" class="text-xl text-left p-3 rounded-[10px] hover:bg-blue-500/8 mt-2.5 cursor-pointer w-full">{{ category.category_name }}</button>
+                    <button @dblclick.prevent="getProductsByCategory(choiceCategory.category_id)" @click.prevent="openCategory(index)" :class="{'text-blue bg-blue-500/8': choiceCategory != null && category.category_id == choiceCategory.category_id}" class="text-xl text-left p-3 rounded-[10px] hover:bg-blue-500/8 mt-2.5 cursor-pointer w-full max-[650px]:text-base wrap-break-word">{{ category.category_name }}</button>
                 </div>
             </div>
         </div>
-        <div class="grow bg-dark shadow-[0_0px_15px_0_rgba(255,255,255,0.4)] rounded-l-[20px] p-2 overflow-y-auto custom-scrollbar">
+        <div class="grow bg-dark shadow-[0_0px_15px_0_rgba(255,255,255,0.4)] rounded-l-[20px] p-2 overflow-y-auto custom-scrollbar max-[650px]:min-w-auto">
             <div v-if="choiceCategory != null">
                 <div class="text-xl text-center">
                     <button class="cursor-pointer" @click.prevent="getProductsByCategory(choiceCategory.category_id)">{{ choiceCategory.category_name }}</button>

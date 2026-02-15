@@ -56,14 +56,14 @@ onMounted(async ()=>{
 </script>
 <template>
     <div class="flex gap-x-2.5 flex-wrap">
-        <select v-model="categories.choiceCategoryIndex" class="bg-[#263646] min-w-57.5 mt-2.5 rounded-[10px] focus:outline-none h-10 cursor-pointer">
+        <select v-model="categories.choiceCategoryIndex" class="bg-[#263646] w-full sm:w-auto min-w-0 max-w-full mt-2.5 rounded-[10px] focus:outline-none h-10 cursor-pointer">
             <option value="" disabled selected hidden>{{ useTranslateStore().t('choiceCategory') }}</option>
             <div v-for="(category, index) in categories.all" :key="index">
                 <option :value="index">{{ category.category_name }}</option>
             </div>
         </select>
         <div v-if="categories.subcategories.length >= 1">
-            <select v-model="categories.choiceSubcategoryIndex" class="bg-[#263646] min-w-57.5 mt-2.5 rounded-[10px] focus:outline-none h-10 cursor-pointer">
+            <select v-model="categories.choiceSubcategoryIndex" class="bg-[#263646] w-full mt-2.5 rounded-[10px] focus:outline-none h-10 cursor-pointer">
                 <option value="" disabled selected hidden>{{ useTranslateStore().t('choiceSubcategory') }}</option>
                 <div v-for="(category, index) in categories.subcategories" :key="index">
                     <option :value="index">{{ category.subcategory_name }}</option>
@@ -71,7 +71,7 @@ onMounted(async ()=>{
             </select>
         </div>
         <div v-if="categories.nestedSubcategories.length >= 1">
-            <select v-model="useEditProductStore().category.nestedSubcategoryId" class="bg-[#263646] min-w-57.5 mt-2.5 rounded-[10px] focus:outline-none h-10 cursor-pointer">
+            <select v-model="useEditProductStore().category.nestedSubcategoryId" class="bg-[#263646] w-full mt-2.5 rounded-[10px] focus:outline-none h-10 cursor-pointer">
                 <option :value="null" disabled selected hidden>{{ useTranslateStore().t('choiceNestedSubcategory') }}</option>
                 <div v-for="(category, index) in categories.nestedSubcategories" :key="index">
                     <option :value="category.nested_category_id">{{ category.nested_category_name }}</option>

@@ -50,7 +50,7 @@ onMounted(() => {
             <TopNotification :text="copyText" textParam="text-lime-500" :hideAfter="1200" @close="copyText = ''"></TopNotification>
         </div>
     </Teleport>
-    <div class="min-w-90 max-w-90 rounded-[20px] shadow-[0_0px_15px_0_rgba(255,255,255,0.4)] p-2.5">
+    <div class="min-w-90 max-w-90 rounded-[20px] shadow-[0_0px_15px_0_rgba(255,255,255,0.4)] p-2.5 max-[385px]:min-w-full">
         <div class="flex justify-between items-center">
             <div @click.prevent="props.preview ? '': copy(true)" class="flex gap-x-1 items-center cursor-pointer">
                 <img src="/public/img/copy.svg" alt="copy">

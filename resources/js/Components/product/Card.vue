@@ -55,7 +55,7 @@ const addFavorite = async () => {
         <div>
             <Link :href="route('product.show', props.product.id)">
                 <div class="text-[14px] line-clamp-2 wrap-break-word max-w-42.75">{{ props.product.name }}</div>
-                <div v-if="props.product.reviews_count != null" class="flex items-center gap-1.25">
+                <div v-if="props.product.reviews_count != null" class="flex flex-wrap items-center gap-1.25">
                     <img class="w-5 h-5" src="/public/img/star_gold.svg" alt="rating">
                     <div>{{ props.product.rating_average }}</div>
                     <img class="w-4 h-4" src="/public/img/comment.svg" alt="reviews">

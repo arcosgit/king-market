@@ -80,9 +80,11 @@ onMounted(async()=>{
     </Head>
     <MainLayout>
         <div v-if="!load && product != null">
-            <div class="flex justify-between gap-x-5 w-full items-start">
+            <div class="flex max-xl:flex-wrap justify-between gap-5 w-full items-start">
                 <Images :images="product.images"></Images>
-                <Summary :product="product"></Summary>
+                <div class="max-lg:flex max-lg:justify-center max-lg:items-center max-lg:w-full">
+                    <Summary :product="product"></Summary>
+                </div>
                 <div class="w-full h-125 rounded-[20px] shadow-[0_0px_15px_0_rgba(255,255,255,0.4)] p-2.5 overflow-y-auto custom-scrollbar">
                     <div class="text-base font-bold text-center">{{ useTranslateStore().t('relatedProducts') }}</div>
                     <div v-if="similarProducts.length > 0" class="flex flex-col gap-y-2.5 my-2.5">

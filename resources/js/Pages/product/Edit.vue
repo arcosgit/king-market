@@ -163,7 +163,7 @@ onUnmounted(()=>{
                     <div v-if="load.edit" class="min-w-40 h-10 flex justify-center items-center">
                         <div class="w-7.5 h-7.5 border-3 text-blue-400 text-4xl animate-spin border-gray-300 flex items-center justify-center border-t-blue-400 rounded-full"></div>
                     </div>
-                    <div v-if="!load.delete" class="flex gap-x-2.5" >
+                    <div v-if="!load.delete" class="flex flex-wrap gap-2.5" >
                         <button v-if="!load.edit" @click.prevent="editProduct" class="btn-blue min-w-40 h-10">{{ useTranslateStore().t('editProductBtn') }}</button>
                         <button @click.prevent="showPreview" class="btn-purple min-w-40 h-10">{{ useTranslateStore().t('productPreview') }}</button>
                         <button @click.prevent="deleteProduct" class="border text-[14px] h-10 p-2.5 flex justify-center items-center border-red-500 bg-red-500 rounded-[10px] hover:bg-inherit hover:text-red-500 transition duration-300 cursor-pointer">{{ useTranslateStore().t('deleteProductBtn') }}</button>
@@ -174,9 +174,11 @@ onUnmounted(()=>{
                 </div>
             </div>
             <div v-else>
-                <div class="flex justify-between gap-x-5 w-full items-start">
+                <div class="flex max-xl:flex-wrap justify-between gap-5 w-full items-start">
                     <ImagesPreview :images="useEditProductStore().images"></ImagesPreview>
-                    <Summary :product="useEditProductStore()" :preview="true"></Summary>
+                    <div class="max-lg:flex max-lg:justify-center max-lg:items-center max-lg:w-full">
+                        <Summary :product="useEditProductStore()" :preview="true"></Summary>
+                    </div>
                     <div class="w-full h-125 rounded-[20px] shadow-[0_0px_15px_0_rgba(255,255,255,0.4)] p-2.5">
                         <div class="text-base font-bold text-center">{{ useTranslateStore().t('relatedProducts') }}</div>
                     </div>
@@ -184,7 +186,7 @@ onUnmounted(()=>{
                 <div class="text-xl font-bold mt-5">{{ useTranslateStore().t('description') }}</div>
                 <div class="text-base wrap-break-word">{{ useEditProductStore().description }}</div>
                 <div class="text-xl font-bold mt-5">{{ useTranslateStore().t('aboutProduct') }}</div>
-                <div v-for="(characteristic, index) in useEditProductStore().characteristics" :key="index" class="mt-1"><span class="text-gray">{{ characteristic.characteristic_key }}</span> {{ characteristic.characteristic_value }}</div>
+                <div v-for="(characteristic, index) in useEditProductStore().characteristics" :key="index" class="mt-1 wrap-break-word"><span class="text-gray wrap-break-word">{{ characteristic.characteristic_key }}</span> <span class="wrap-break-word">{{ characteristic.characteristic_value }}</span></div>
                 <div class="text-xl font-bold">{{ useTranslateStore().t('productReviews') }}</div>
                 <button @click.prevent="preview = false" class="btn-green mt-2.5">{{ useTranslateStore().t('backСreation') }}</button>
             </div>

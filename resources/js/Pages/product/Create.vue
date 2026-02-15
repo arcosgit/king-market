@@ -129,7 +129,7 @@ const showPreview = () => {
             <div class="text-xl font-bold mt-5">{{ useTranslateStore().t('description') }}</div>
             <div class="text-base wrap-break-word">{{ useCreateProductStore().description }}</div>
             <div class="text-xl font-bold mt-5">{{ useTranslateStore().t('aboutProduct') }}</div>
-            <div v-for="(characteristic, index) in useCreateProductStore().characteristics" :key="index" class="mt-1"><span class="text-gray">{{ characteristic.characteristic_key }}</span> {{ characteristic.characteristic_value }}</div>
+            <div v-for="(characteristic, index) in useCreateProductStore().characteristics" :key="index" class="mt-1 wrap-break-word"><span class="text-gray wrap-break-word">{{ characteristic.characteristic_key }}</span> <span class="wrap-break-word">{{ characteristic.characteristic_value }}</span></div>
             <div class="text-xl font-bold">{{ useTranslateStore().t('productReviews') }}</div>
             <button @click.prevent="preview = false" class="btn-green mt-2.5">{{ useTranslateStore().t('backСreation') }}</button>
         </div>

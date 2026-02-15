@@ -79,26 +79,28 @@ onUnmounted(() => {window.removeEventListener('scroll', handleScroll);});
 </script>
 <template>
     <div class="text-xl text-center">{{ useTranslateStore().t('filters') }}</div>
-    <div class="flex gap-x-2.5 mt-1">
-        <div class="flex items-center gap-x-2.5">
+    <div class="flex gap-2.5 mt-1 max-lg:flex-col">
+        <div class="flex items-center gap-2.5 max-[510px]:flex-col max-[510px]:items-start">
             <div class="text-lg">{{ useTranslateStore().t('price') }}</div>
             <input v-model="filters.priceFrom" type="number" class="p-2.25 w-50 h-10 border-2 border-lime-500 rounded-[10px] focus:outline-none" :placeholder="useTranslateStore().t('priceFrom')">
             <input v-model="filters.priceTo" type="number" class="p-2.25 w-50 h-10 border-2 border-lime-500 rounded-[10px] focus:outline-none" :placeholder="useTranslateStore().t('priceTo')">
         </div>
-        <div class="flex items-center gap-x-2.5">
-            <div class="text-lg">{{ useTranslateStore().t('rating') }}</div>
-            <select v-model="filters.rating" class="bg-[#263646] rounded-[10px] h-10 focus:outline-none cursor-pointer">
-                <option :value="null">{{ useTranslateStore().t('ratingDoNotMatter') }}</option>
-                <option value="5">⭐⭐⭐⭐⭐</option>
-                <option value="4">⭐⭐⭐⭐</option>
-                <option value="3">⭐⭐⭐</option>
-                <option value="2">⭐⭐</option>
-                <option value="1">⭐</option>
-            </select>
+        <div class="flex flex-wrap gap-2.5">
+            <div class="flex items-center gap-x-2.5">
+                <div class="text-lg">{{ useTranslateStore().t('rating') }}</div>
+                <select v-model="filters.rating" class="bg-[#263646] rounded-[10px] h-10 focus:outline-none cursor-pointer">
+                    <option :value="null">{{ useTranslateStore().t('ratingDoNotMatter') }}</option>
+                    <option value="5">⭐⭐⭐⭐⭐</option>
+                    <option value="4">⭐⭐⭐⭐</option>
+                    <option value="3">⭐⭐⭐</option>
+                    <option value="2">⭐⭐</option>
+                    <option value="1">⭐</option>
+                </select>
+            </div>
+            <button @click.prevent="setFilters" class="btn-blue h-10">{{ useTranslateStore().t('apply') }}</button>
+            <button @click.prevent="returnOldProducts" class="flex justify-center items-center border border-amber-500 bg-amber-500 p-2.5 cursor-pointer rounded-[10px] h-10 hover:bg-inherit hover:text-amber-500 transition duration-300">{{ useTranslateStore().t('reset') }}</button>
+            <button @click.prevent="useFindProductStore().fullResetData()" class="btn-purple h-10">{{ useTranslateStore().t('close') }}</button>
         </div>
-        <button @click.prevent="setFilters" class="btn-blue h-10">{{ useTranslateStore().t('apply') }}</button>
-        <button @click.prevent="returnOldProducts" class="flex justify-center items-center border border-amber-500 bg-amber-500 p-2.5 cursor-pointer rounded-[10px] h-10 hover:bg-inherit hover:text-amber-500 transition duration-300">{{ useTranslateStore().t('reset') }}</button>
-        <button @click.prevent="useFindProductStore().fullResetData()" class="btn-purple h-10">{{ useTranslateStore().t('close') }}</button>
     </div>
     <div class="relative">
         <div v-if="errors.priceFrom" class="text-red-500 absolute -bottom-5.5">{{ useTranslateStore().t('priceFromError') }}</div>
