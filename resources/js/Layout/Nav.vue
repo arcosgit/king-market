@@ -8,7 +8,7 @@ import Language from '../Components/user/helpers/Language.vue'
 const showAuthModalFlag = ref(false);
 const isMobile = ref(false);
 
-const checkWidth = () => {isMobile.value = window.innerWidth < 1024}
+const checkWidth = () => {isMobile.value = window.innerWidth < 640}
 onMounted(() => {
     checkWidth();
     window.addEventListener('resize', checkWidth);

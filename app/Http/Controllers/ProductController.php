@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Application\Category\DTOs\CategoriesWithAllNestingsIds;
+use App\Application\Category\DTOs\CategoriesWithAllNestingsIdsFilter;
+use App\Application\Category\UseCases\ProductsByCategoryUseCase;
+use App\Application\Category\UseCases\ProductsByCategoryWithFilterUseCase;
 use App\Application\Product\DTOs\BuyProductData;
 use App\Application\Product\DTOs\EditProductData;
 use App\Application\Product\DTOs\StoreProductData;
@@ -24,6 +28,7 @@ use App\Http\Resources\Product\ProductEditResource;
 use App\Http\Resources\Product\ProductReviewResource;
 use App\Http\Resources\Product\ProductShowResource;
 use App\Infrastructure\Repositories\EloquentBalanceRepository;
+use App\Infrastructure\Repositories\EloquentCategoryRepository;
 use App\Infrastructure\Repositories\EloquentOrderRepository;
 use App\Infrastructure\Repositories\EloquentProductRepository;
 use App\Models\BusinessModel;
@@ -241,57 +246,17 @@ class ProductController extends Controller
 
     public function catalog(CatalogRequest $request)
     {
-        $data = $request->validated();
-        $category_id = $data['category_id'] ?? $data['subcategory_id'] ?? $data['nested_subcategory_id'] ?? null;
-        $category_column = $data['category_id'] != null ? 'category_id' : ($data['subcategory_id'] != null ? 'subcategory_id' : 'nested_subcategory_id');
-        if($category_id != null){
-            $products = ProductModel::with('image', 'reviews', 'favorite')->whereHas('categories', function($query) use ($category_id, $category_column){
-                $query->where($category_column, $category_id);
-            })->join('product_categories', 'products.id', '=', 'product_categories.product_id')
-            ->when($category_column === 'category_id', function ($query) {
-                $query->orderByRaw('(product_categories.subcategory_id IS NULL AND product_categories.nested_subcategory_id IS NULL) DESC');
-            })->when($category_column === 'subcategory_id', function ($query) {
-                $query->orderByRaw('(product_categories.nested_subcategory_id IS NULL) DESC');
-            })->select('products.*')->paginate(30);
-            return ProductCardResource::collection($products)->resolve();
-        } else {
-            return response()->json(['empty_categories' => []]);
-        }
+        $data = CategoriesWithAllNestingsIds::fromRequest($request);
+        $use_case = new ProductsByCategoryUseCase(new EloquentCategoryRepository);
+        return $use_case->execute($data);
     }
 
     public function catalogFilter(CatalogFilterRequest $request)
     {
-        $data = $request->validated();
-        $category_id = $data['category_id'] ?? $data['subcategory_id'] ?? $data['nested_subcategory_id'] ?? null;
-        $category_column = $data['category_id'] != null ? 'category_id' : ($data['subcategory_id'] != null ? 'subcategory_id' : 'nested_subcategory_id');
-        if($category_id != null){
-            $products = ProductModel::with('image', 'reviews', 'favorite')->whereHas('categories', function($query) use ($category_id, $category_column){
-                $query->where($category_column, $category_id);
-            })->join('product_categories', 'products.id', '=', 'product_categories.product_id')
-            ->when($category_column === 'category_id', function ($query) {
-                $query->orderByRaw('(product_categories.subcategory_id IS NULL AND product_categories.nested_subcategory_id IS NULL) DESC');
-            })->when($category_column === 'subcategory_id', function ($query) {
-                $query->orderByRaw('(product_categories.nested_subcategory_id IS NULL) DESC');
-            })->select('products.*');
-            if($data['price_from'] != null){
-                $products->where('price', '>=', $data['price_from'])->orderBy('price');
-            }
-            if($data['price_to'] != null){
-                $products->where('price', '<=', $data['price_to'])->orderBy('price');
-            }
-            $rating = $data['rating'];
-            if($rating != null){
-                $products->whereHas('reviews', function($query) use ($rating){
-                    $query->select('product_id')->groupBy('product_id')->havingRaw('ROUND(AVG(rating)) = ?', [$rating]);
-                });
-            }
-            $products = $products->paginate(30);
-            return \count($products) != 0 ?
-            response()->json(['has_more_page' => $products->hasMorePages(), 'data' => ProductCardResource::collection($products)->resolve()])
-            : response()->json(['not_found' => true]);
-        } else {
-            return response()->json(['empty_categories' => []]);
-        }
+
+        $data = CategoriesWithAllNestingsIdsFilter::fromRequest($request);
+        $use_case = new ProductsByCategoryWithFilterUseCase(new EloquentCategoryRepository);
+        return $use_case->execute($data);
     }
 
     public function catalogShow()

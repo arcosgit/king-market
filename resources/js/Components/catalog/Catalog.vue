@@ -43,25 +43,25 @@ onMounted(async ()=>{
 </script>
 <template>
     <div class="flex gap-x-10 h-[calc(100vh-180px)] mt-2.5 max-[650px]:gap-x-5">
-        <div class="min-w-75 max-w-75 max-[650px]:min-w-37 bg-dark shadow-[0_0px_15px_0_rgba(255,255,255,0.4)] rounded-r-[20px] p-2 overflow-y-auto custom-scrollbar max-[]">
+        <div class="min-w-75 max-w-75 max-[650px]:min-w-45 bg-dark shadow-[0_0px_15px_0_rgba(255,255,255,0.4)] rounded-r-[20px] p-2 overflow-y-auto custom-scrollbar max-[]">
             <div class="flex flex-col">
                 <div v-for="(category, index) in useCatalogStore().categories" :key="index">
-                    <button @dblclick.prevent="getProductsByCategory(choiceCategory.category_id)" @click.prevent="openCategory(index)" :class="{'text-blue bg-blue-500/8': choiceCategory != null && category.category_id == choiceCategory.category_id}" class="text-xl text-left p-3 rounded-[10px] hover:bg-blue-500/8 mt-2.5 cursor-pointer w-full max-[650px]:text-base wrap-break-word">{{ category.category_name }}</button>
+                    <button @click.prevent="openCategory(index)" :class="{'text-blue bg-blue-500/8': choiceCategory != null && category.category_id == choiceCategory.category_id}" class="text-xl text-left p-3 rounded-[10px] hover:bg-blue-500/8 mt-2.5 cursor-pointer w-full max-[650px]:text-base wrap-break-word">{{ category.category_name }}</button>
                 </div>
             </div>
         </div>
-        <div class="grow bg-dark shadow-[0_0px_15px_0_rgba(255,255,255,0.4)] rounded-l-[20px] p-2 overflow-y-auto custom-scrollbar max-[650px]:min-w-auto">
+        <div class="grow bg-dark shadow-[0_0px_15px_0_rgba(255,255,255,0.4)] rounded-l-[20px] p-2 overflow-y-auto custom-scrollbar max-[650px]:min-w-37">
             <div v-if="choiceCategory != null">
                 <div class="text-xl text-center">
-                    <button class="cursor-pointer" @click.prevent="getProductsByCategory(choiceCategory.category_id)">{{ choiceCategory.category_name }}</button>
+                    <button class="cursor-pointer max-[650px]:text-base" @click.prevent="getProductsByCategory(choiceCategory.category_id)">{{ choiceCategory.category_name }}</button>
                 </div>
                 <div class="flex flex-wrap gap-x-7.5 mt-2.5">
                     <div v-for="(subcategory, indexSubcategory) in choiceCategory.subcategories" :key="indexSubcategory" class="flex flex-col gap-y-1">
-                        <button @click.prevent="getProductsByCategory(null, subcategory.subcategory_id)" class="text-lg text-left cursor-pointer">{{ subcategory.subcategory_name }}</button>
+                        <button @click.prevent="getProductsByCategory(null, subcategory.subcategory_id)" class="text-lg text-left cursor-pointer max-[650px]:text-base">{{ subcategory.subcategory_name }}</button>
                         <div v-if="subcategory.nested_categories.length > 0">
                             <div class="flex flex-col gap-y-1">
                                 <div v-for="(nestedSubcategory, indexNestedSubcategory) in subcategory.nested_categories" :key="indexNestedSubcategory" class="text-gray text-base">
-                                    <button class="cursor-pointer text-left" @click.prevent="getProductsByCategory(null, null, nestedSubcategory.nested_category_id)">{{ nestedSubcategory.nested_category_name }}</button>
+                                    <button class="cursor-pointer text-left max-[650px]:text-sm" @click.prevent="getProductsByCategory(null, null, nestedSubcategory.nested_category_id)">{{ nestedSubcategory.nested_category_name }}</button>
                                 </div>
                             </div>
                         </div>
